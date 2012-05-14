@@ -6,7 +6,7 @@
 //!
 //! <h2>Description</h2>
 //! This module implements the test sequence for the xsysctl sub component.<br><br>
-//! - \p Board: NUC140 <br><br>
+//! - \p Board: MCRSTM32 <br><br>
 //! - \p Last-Time(about): 0.5s <br><br>
 //! - \p Phenomenon: Success or failure information will be printed on the UART. <br><br>
 //! .
