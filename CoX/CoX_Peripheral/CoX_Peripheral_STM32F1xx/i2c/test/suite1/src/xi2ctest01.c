@@ -61,7 +61,7 @@ static unsigned long ulDevice[2] = {I2C1_BASE, I2C2_BASE};
 //*****************************************************************************
 static char* xI2C001GetTest(void)
 {
-    return "xI2C, 001, I2C Peripheral Clock Source Set test";
+    return "xI2C, 001, I2C Peripheral Clock Source Set test";    
 }
 
 
@@ -74,6 +74,7 @@ static char* xI2C001GetTest(void)
 //*****************************************************************************
 static void xI2C001Setup(void)
 {
+
     xSysCtlPeripheralEnable2(I2C1_BASE);
     xSysCtlPeripheralReset2(I2C1_BASE);
     
@@ -90,6 +91,7 @@ static void xI2C001Setup(void)
     
     xSPinTypeI2C(I2C2SCK, PB10);
     xSPinTypeI2C(I2C2SDA, PB11);
+
 }
 
 
@@ -116,6 +118,7 @@ static void xI2C001TearDown(void)
 //*****************************************************************************
 static void xI2C001Execute(void)
 {
+
     unsigned long ulBase;
     unsigned long ulTemp;
     unsigned long i;
@@ -159,11 +162,12 @@ static void xI2C001Execute(void)
         TestAssert((0) == ulTemp,
                    "xi2c API \"I2CDMAEnable \"error!");
         
-        I2COwnAddress2Config(ulBase, I2C_DUAL_ADD_EN, 0x12);  
+        I2COwnAddress2Config(ulBase, 0, 0x12);  
         ulTemp = xHWREG(ulBase + I2C_OAR2);
         TestAssert(((0x12 << 1) | 1) == ulTemp,
                    "xi2c API \"I2COwnAddress2Config \"error!");
     }
+
 }
 
 //

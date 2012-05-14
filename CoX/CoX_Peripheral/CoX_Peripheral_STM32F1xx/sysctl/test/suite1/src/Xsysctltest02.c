@@ -33,7 +33,10 @@
 //
 //*****************************************************************************
 
+
+#define  STM32F103VB  //select special mcu  for test
 #include "test.h"
+#include "STM32F1XX_TEST.h"
 #include "xhw_memmap.h"
 
 //*****************************************************************************
@@ -45,95 +48,40 @@
 //!
 //
 //*****************************************************************************
-//
-//! STM32F1xx_SysCtl_Peripheral_ID Array
-//
-unsigned long ulSYSCTL_PERIPH[] = { 
-SYSCTL_PERIPH_ETHMACRX, SYSCTL_PERIPH_ETHMACTX, SYSCTL_PERIPH_SDIO, 
-SYSCTL_PERIPH_FSMC, SYSCTL_PERIPH_CRC, SYSCTL_PERIPH_FLITF ,SYSCTL_PERIPH_SRAM,
-SYSCTL_PERIPH_DMA2, SYSCTL_PERIPH_DMA1, SYSCTL_PERIPH_RTC, SYSCTL_PERIPH_ETHMAC,
-SYSCTL_PERIPH_USBOTG, SYSCTL_PERIPH_TIM11, SYSCTL_PERIPH_TIM10, 
-SYSCTL_PERIPH_TIM9, SYSCTL_PERIPH_ADC3, SYSCTL_PERIPH_USART1, SYSCTL_PERIPH_TIM8,
-SYSCTL_PERIPH_SPI1, SYSCTL_PERIPH_TIM1, SYSCTL_PERIPH_ADC2, SYSCTL_PERIPH_ADC1,
-SYSCTL_PERIPH_IOPG, SYSCTL_PERIPH_IOPF, SYSCTL_PERIPH_IOPE, SYSCTL_PERIPH_IOPD,
-SYSCTL_PERIPH_IOPC, SYSCTL_PERIPH_IOPB, SYSCTL_PERIPH_IOPA, SYSCTL_PERIPH_AFIO,
-SYSCTL_PERIPH_DAC, SYSCTL_PERIPH_PWR, SYSCTL_PERIPH_BKP, SYSCTL_PERIPH_CAN2,
-SYSCTL_PERIPH_CAN1, SYSCTL_PERIPH_USB, SYSCTL_PERIPH_I2C2, SYSCTL_PERIPH_I2C1,
-SYSCTL_PERIPH_UART5, SYSCTL_PERIPH_UART4, SYSCTL_PERIPH_USART3, 
-SYSCTL_PERIPH_USART2, SYSCTL_PERIPH_SPI3, SYSCTL_PERIPH_SPI2, SYSCTL_PERIPH_WWDG,
-SYSCTL_PERIPH_TIM14, SYSCTL_PERIPH_TIM13, SYSCTL_PERIPH_TIM12, SYSCTL_PERIPH_TIM7,
-SYSCTL_PERIPH_TIM6, SYSCTL_PERIPH_TIM5, SYSCTL_PERIPH_TIM4, SYSCTL_PERIPH_TIM3,
-SYSCTL_PERIPH_TIM2};
 
-
-//
-//! Peripheral Enable Mask
-//
-unsigned long ulPeriphEnableMask[] = {
-RCC_AHBENR_ETHMACRXEN, RCC_AHBENR_ETHMACTXEN, RCC_AHBENR_SDIOEN,
-RCC_AHBENR_FSMCEN, RCC_AHBENR_CRCEN, RCC_AHBENR_FLITFEN,RCC_AHBENR_SRAMEN,
-RCC_AHBENR_DMA2EN, RCC_AHBENR_DMA1EN, RCC_BDCR_RTCEN,RCC_AHBENR_ETHMACEN,
-RCC_AHBENR_OTGFSEN, RCC_APB2ENR_TIM11EN, RCC_APB2ENR_TIM10EN,
-RCC_APB2ENR_TIM9EN, RCC_APB2ENR_ADC3EN, RCC_APB2ENR_USART1EN,RCC_APB2ENR_TIM8EN,
-RCC_APB2ENR_SPI1EN, RCC_APB2ENR_TIM1EN,RCC_APB2ENR_ADC2EN, RCC_APB2ENR_ADC1EN,
-RCC_APB2ENR_IOPGEN, RCC_APB2ENR_IOPFEN, RCC_APB2ENR_IOPEEN, RCC_APB2ENR_IOPDEN, 
-RCC_APB2ENR_IOPCEN, RCC_APB2ENR_IOPBEN, RCC_APB2ENR_IOPAEN, RCC_APB2ENR_AFIOEN,
-RCC_APB1ENR_DACEN, RCC_APB1ENR_PWREN,RCC_APB1ENR_BKPEN, RCC_APB1ENR_CAN2EN,
-RCC_APB1ENR_CAN1EN, RCC_APB1ENR_USBEN, RCC_APB1ENR_I2C2EN, RCC_APB1ENR_I2C1EN,
-RCC_APB1ENR_UART5EN, RCC_APB1ENR_UART4EN, RCC_APB1ENR_USART3EN, 
-RCC_APB1ENR_USART2EN, RCC_APB1ENR_SPI3EN, RCC_APB1ENR_SPI2EN, RCC_APB1ENR_WWDGEN,
-RCC_APB1ENR_TIM14EN, RCC_APB1ENR_TIM13EN, RCC_APB1ENR_TIM12EN, RCC_APB1ENR_TIM7EN,
-RCC_APB1ENR_TIM6EN, RCC_APB1ENR_TIM5EN, RCC_APB1ENR_TIM4EN, RCC_APB1ENR_TIM3EN,
-RCC_APB1ENR_TIM2EN};
-
-unsigned long ulPeriprerAddr[] = { 
-xDMA1_BASE, xADC1_BASE, xADC2_BASE, xTIMER1_BASE, xSPI1_BASE, 
-xUART1_BASE, xGPIO_PORTA_BASE, xGPIO_PORTB_BASE, xGPIO_PORTC_BASE,
-xGPIO_PORTD_BASE, xGPIO_PORTE_BASE,
-xTIMER2_BASE, xTIMER3_BASE, xTIMER4_BASE, xWDT_BASE, xSPI2_BASE, xUART2_BASE,
-xUART3_BASE, xI2C1_BASE, xI2C2_BASE};
-
-unsigned long ulxPeriphEnableMask[] = {
-RCC_AHBENR_DMA1EN, RCC_APB2ENR_ADC2EN, RCC_APB2ENR_ADC1EN, RCC_APB2ENR_TIM1EN,
-RCC_APB2ENR_SPI1EN, RCC_APB2ENR_USART1EN, RCC_APB2ENR_IOPAEN, RCC_APB2ENR_IOPBEN, 
-RCC_APB2ENR_IOPCEN, RCC_APB2ENR_IOPDEN, RCC_APB2ENR_IOPEEN,  
-RCC_APB1ENR_TIM2EN, RCC_APB1ENR_TIM3EN, RCC_APB1ENR_TIM4EN, RCC_APB1ENR_WWDGEN,
-RCC_APB1ENR_SPI2EN, RCC_APB1ENR_USART2EN, RCC_APB1ENR_USART3EN, 
-RCC_APB1ENR_I2C1EN, RCC_APB1ENR_I2C2EN
-};
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl001 register test.
+//! \brief Get the Test description of xsysctl002 register test.
 //!
-//! \return the desccription of the xsysctl001 test.
+//! \return the desccription of the xsysctl002 test.
 //
 //*****************************************************************************
-static char* xSysctl001GetTest(void)
+static char* xSysctl002GetTest(void)
 {
-    return "xsysctl, 001, xsysctl register and api test";
+    return "xsysctl, 002, xsysctl register and api test";
 }
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl001 test.
+//! \brief something should do before the test execute of xsysctl002 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl001Setup(void)
+static void xSysctl002Setup(void)
 {
 
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl001 test.
+//! \brief something should do after the test execute of xsysctl002 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl001TearDown(void)
+static void xSysctl002TearDown(void)
 {   
     xSysCtlPeripheralEnable(SYSCTL_PERIPH_FLITF);
     xSysCtlPeripheralEnable(SYSCTL_PERIPH_SRAM);
@@ -159,181 +107,241 @@ static void xSysctl001TearDown(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 001 test of Peripheral Disable test .
+//! \brief xsysctl 002 test of Peripheral Disable test .
 //!
 //! \return None.
 //
 //*****************************************************************************
+
 static void xsysctl_SysCtlPeripheralDisable_test(void)
 {
     unsigned long ulTemp,ulRegVal,i;
+    unsigned long ulSize = 0;
     
-    for(i = 4; i < 9; i++)
+    // test SysCtlPeripheralDisable function
+    ulSize = sizeof(ulSYSCTL_AHB_Periph)/sizeof(ulSYSCTL_AHB_Periph[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_AHBENR);
-        SysCtlPeripheralDisable(ulSYSCTL_PERIPH[i]);
+        SysCtlPeripheralDisable(ulSYSCTL_AHB_Periph[i]);
         ulRegVal = xHWREG(RCC_AHBENR);
-        TestAssert((0 == (ulRegVal & ulPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!");
+        TestAssert((0 == (ulRegVal & ulSYSCTL_AHB_EnableMask[i]) && 
+                ((ulTemp & (~ulSYSCTL_AHB_EnableMask[i]))== ulRegVal)),
+                 "xsysctl API error!");
         
     }
-    for(i = 16; (i < 30); i++)
-    {
-        ulTemp = xHWREG(RCC_APB2ENR);
-        SysCtlPeripheralDisable(ulSYSCTL_PERIPH[i]);
-        ulRegVal = xHWREG(RCC_APB2ENR);
-        TestAssert((0 == (ulRegVal & ulPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!");
-        
-    }
-    for(i = 31; (i < 54); i++)
+
+
+    ulSize = sizeof(ulSYSCTL_APB1_Periph)/sizeof(ulSYSCTL_APB1_Periph[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_APB1ENR);
-        SysCtlPeripheralDisable(ulSYSCTL_PERIPH[i]);
+        SysCtlPeripheralDisable(ulSYSCTL_APB1_Periph[i]);
         ulRegVal = xHWREG(RCC_APB1ENR);
-        TestAssert((0 == (ulRegVal & ulPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!");
+        TestAssert((0 == (ulRegVal & ulSYSCTL_APB1_EnableMask[i]) && 
+                ((ulTemp & (~ulSYSCTL_APB1_EnableMask[i]))== ulRegVal)),
+                 "xsysctl API error!");
         
     }
-    for(i = 0; i < 1; i++)
+
+    ulSize = sizeof(ulSYSCTL_APB2_Periph)/sizeof(ulSYSCTL_APB2_Periph[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_APB2ENR);
+        SysCtlPeripheralDisable(ulSYSCTL_APB2_Periph[i]);
+        ulRegVal = xHWREG(RCC_APB2ENR);
+        TestAssert((0 == (ulRegVal & ulSYSCTL_APB2_EnableMask[i]) && 
+                ((ulTemp & (~ulSYSCTL_APB2_EnableMask[i]))== ulRegVal)),
+                 "xsysctl API error!");
+        
+    }
+
+
+
+    // test xSysCtlPeripheralDisable2 function
+    ulSize = sizeof(ulPERIPHER_AHB_Addr)/sizeof(ulPERIPHER_AHB_Addr[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_AHBENR);
-        xSysCtlPeripheralDisable2(ulPeriprerAddr[i]);
+        xSysCtlPeripheralDisable2(ulxPERIPHERE_AHB_EnableMask[i]);
         ulRegVal = xHWREG(RCC_AHBENR);
-        TestAssert((0 == (ulRegVal & ulxPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulxPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!"); 
+        TestAssert((0 == (ulRegVal & ulxPERIPHERE_AHB_EnableMask[i]) && 
+            ((ulTemp & (~ulxPERIPHERE_AHB_EnableMask[i]))== ulRegVal)),
+                                                    "xsysctl API error!"); 
     }
-    for(i = 1; i < 11; i++)
-    {
-        ulTemp = xHWREG(RCC_APB2ENR);
-        xSysCtlPeripheralDisable2(ulPeriprerAddr[i]);
-        ulRegVal = xHWREG(RCC_APB2ENR);
-        TestAssert((0 == (ulRegVal & ulxPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulxPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!"); 
-    }
-    for(i = 11; i < 21; i++)
+
+    ulSize = sizeof(ulPERIPHER_APB1_Addr)/sizeof(ulPERIPHER_APB1_Addr[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_APB1ENR);
-        xSysCtlPeripheralDisable2(ulPeriprerAddr[i]);
+        xSysCtlPeripheralDisable2(ulxPERIPHERE_APB1_EnableMask[i]);
         ulRegVal = xHWREG(RCC_APB1ENR);
-        TestAssert((0 == (ulRegVal & ulxPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulxPeriphEnableMask[i]))== ulRegVal)),"xsysctl API error!"); 
+        TestAssert((0 == (ulRegVal & ulxPERIPHERE_APB1_EnableMask[i]) && 
+            ((ulTemp & (~ulxPERIPHERE_APB1_EnableMask[i]))== ulRegVal)),
+                                                    "xsysctl API error!"); 
     }
+
+    ulSize = sizeof(ulPERIPHER_APB2_Addr)/sizeof(ulPERIPHER_APB2_Addr[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_APB2ENR);
+        xSysCtlPeripheralDisable2(ulxPERIPHERE_APB2_EnableMask[i]);
+        ulRegVal = xHWREG(RCC_APB2ENR);
+        TestAssert((0 == (ulRegVal & ulxPERIPHERE_APB2_EnableMask[i]) && 
+            ((ulTemp & (~ulxPERIPHERE_APB2_EnableMask[i]))== ulRegVal)),
+                                                    "xsysctl API error!"); 
+    }
+
 }
+
+
+
 
 
 //*****************************************************************************
 //
-//! \brief xsysctl 001 test of Peripheral reset test .
+//! \brief xsysctl 002 test of Peripheral reset test .
 //!
 //! \return None.
 //
 //*****************************************************************************
+
+
 static void xsysctl_SysCtlPeripheralReset_test(void)
 {
-    unsigned long ulTemp;
-    
-    for (ulTemp = 10;ulTemp <= 54; ulTemp++)
+    unsigned long i = 0;
+    unsigned long ulSize  = 0;
+
+    ulSize = sizeof(ulSYSCTL_AHB_Periph)/sizeof(ulSYSCTL_AHB_Periph[0]);
+    for(i = 0; i < ulSize; i++)
     {
-        SysCtlPeripheralReset(ulSYSCTL_PERIPH[ulTemp]);
-        TestAssert( (0 == xHWREG(RCC_APB2RSTR))&&(0 == xHWREG(RCC_APB2RSTR)),
-                                                          "xsysctl API error!");
+        xSysCtlPeripheralReset(ulSYSCTL_AHB_Periph[i]);
+        TestAssert(0 == xHWREG(RCC_AHBRSTR), "xsysctl API error!" );
     }
+    
+    ulSize = sizeof(ulSYSCTL_APB1_Periph)/sizeof(ulSYSCTL_APB1_Periph[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        xSysCtlPeripheralReset(ulSYSCTL_APB1_Periph[i]);
+        TestAssert(0 == xHWREG(RCC_APB1RSTR), "xsysctl API error!" );
+    }
+  
+    ulSize = sizeof(ulSYSCTL_APB2_Periph)/sizeof(ulSYSCTL_APB2_Periph[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        xSysCtlPeripheralReset(ulSYSCTL_APB2_Periph[i]);
+        TestAssert(0 == xHWREG(RCC_APB2RSTR), "xsysctl API error!" );
+    }
+
+
 }
 
 //*****************************************************************************
 //
-//! \brief xsysctl 001 test of Peripheral Enable test .
+//! \brief xsysctl 002 test of Peripheral Enable test .
 //!
 //! \return None.
 //
 //*****************************************************************************
+
+
 static void xsysctl_SysCtlPeripheralEnable_test(void)
 {
-    unsigned long ulTemp,ulRegVal,i;
-    
-    for(i = 4; (i < 9); i++)
-    {
-        if(i == 7)
-            continue;
-        ulTemp = xHWREG(RCC_AHBENR);
-        SysCtlPeripheralEnable(ulSYSCTL_PERIPH[i]);
-        ulRegVal = xHWREG(RCC_AHBENR);
-        TestAssert((ulPeriphEnableMask[i] == (ulRegVal & ulPeriphEnableMask[i]))
-                   ,"xsysctl API error!"); 
-    }
-    
-    for(i = 16; (i < 30); i++)
-    {
-        if(i == 17 || i == 22 ||i == 23)
-            continue;
-        ulTemp = xHWREG(RCC_APB2ENR);
-        SysCtlPeripheralEnable(ulSYSCTL_PERIPH[i]);
-        ulRegVal = xHWREG(RCC_APB2ENR);
-        TestAssert((ulPeriphEnableMask[i] == (ulRegVal & ulPeriphEnableMask[i])),
-                   "xsysctl API error!");
-    }
-    for(i = 31; (i < 54); i++)
-    {
-        if(i == 33 || i == 38 || i == 39 || i == 42 || i == 45 || i == 46 ||
-           i == 47 || i == 48 || i == 49 || i == 50)
-            continue;
-        ulTemp = xHWREG(RCC_APB1ENR);
-        SysCtlPeripheralEnable(ulSYSCTL_PERIPH[i]);
-        ulRegVal = xHWREG(RCC_APB1ENR);
-        TestAssert((ulPeriphEnableMask[i] == (ulRegVal & ulPeriphEnableMask[i])),
-                   "xsysctl API error!");
-    }
-    for(i = 0; i < 1; i++)
+    unsigned long i = 0;
+    unsigned long ulTemp = 0;
+    unsigned long ulRegVal = 0;
+    unsigned long ulSize = 0;
+
+    // test the function SysCtlPeripheralEnable 
+    ulSize = sizeof(ulSYSCTL_AHB_Periph)/sizeof(ulSYSCTL_AHB_Periph[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_AHBENR);
-        xSysCtlPeripheralEnable2(ulPeriprerAddr[i]);
+        SysCtlPeripheralEnable(ulSYSCTL_AHB_Periph[i]);
         ulRegVal = xHWREG(RCC_AHBENR);
-        TestAssert((ulxPeriphEnableMask[i] == (ulRegVal & ulxPeriphEnableMask[i])),
-                   "xsysctl API error!"); 
+        TestAssert((ulSYSCTL_AHB_EnableMask[i] == (ulRegVal & 
+                           ulSYSCTL_AHB_EnableMask[i])),"xsysctl API error!"); 
     }
-    for(i = 1; i < 11; i++)
-    {
-        ulTemp = xHWREG(RCC_APB2ENR);
-        xSysCtlPeripheralEnable2(ulPeriprerAddr[i]);
-        ulRegVal = xHWREG(RCC_APB2ENR);
-        TestAssert((ulxPeriphEnableMask[i] == (ulRegVal & ulxPeriphEnableMask[i])),
-                   "xsysctl API error!"); 
-    }
-    for(i = 11; i < 21; i++)
+
+    ulSize = sizeof(ulSYSCTL_APB1_Periph)/sizeof(ulSYSCTL_APB1_Periph[0]);
+    for(i = 0; i < ulSize; i++)
     {
         ulTemp = xHWREG(RCC_APB1ENR);
-        xSysCtlPeripheralEnable2(ulPeriprerAddr[i]);
+        SysCtlPeripheralEnable(ulSYSCTL_APB1_Periph[i]);
         ulRegVal = xHWREG(RCC_APB1ENR);
-        TestAssert((ulxPeriphEnableMask[i] == (ulRegVal & ulxPeriphEnableMask[i])),
-                   "xsysctl API error!"); 
+        TestAssert((ulSYSCTL_APB1_EnableMask[i] == (ulRegVal & 
+                           ulSYSCTL_APB1_EnableMask[i])),"xsysctl API error!"); 
     }
+
+    ulSize = sizeof(ulSYSCTL_APB2_Periph)/sizeof(ulSYSCTL_APB2_Periph[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_APB2ENR);
+        SysCtlPeripheralEnable(ulSYSCTL_APB2_Periph[i]);
+        ulRegVal = xHWREG(RCC_APB2ENR);
+        TestAssert((ulSYSCTL_APB2_EnableMask[i] == (ulRegVal & 
+                           ulSYSCTL_APB2_EnableMask[i])),"xsysctl API error!"); 
+    }  
+
+
+
+    // test the function xSysCtlPeripheralEnable2
+
+    ulSize = sizeof(ulPERIPHER_AHB_Addr)/sizeof(ulPERIPHER_AHB_Addr[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_AHBENR);
+        xSysCtlPeripheralEnable2(ulPERIPHER_AHB_Addr[i]);
+        ulRegVal = xHWREG(RCC_AHBENR);
+        TestAssert((ulxPERIPHERE_AHB_EnableMask[i] == (ulRegVal & 
+                        ulxPERIPHERE_AHB_EnableMask[i])), "xsysctl API error!"); 
+    }
+
+    ulSize = sizeof(ulPERIPHER_APB1_Addr)/sizeof(ulPERIPHER_APB1_Addr[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_APB1ENR);
+        xSysCtlPeripheralEnable2(ulPERIPHER_APB1_Addr[i]);
+        ulRegVal = xHWREG(RCC_APB1ENR);
+        TestAssert((ulxPERIPHERE_APB1_EnableMask[i] == (ulRegVal & 
+                        ulxPERIPHERE_APB1_EnableMask[i])), "xsysctl API error!"); 
+    }
+
+    ulSize = sizeof(ulPERIPHER_APB2_Addr)/sizeof(ulPERIPHER_APB2_Addr[0]);
+    for(i = 0; i < ulSize; i++)
+    {
+        ulTemp = xHWREG(RCC_APB2ENR);
+        xSysCtlPeripheralEnable2(ulPERIPHER_APB2_Addr[i]);
+        ulRegVal = xHWREG(RCC_APB2ENR);
+        TestAssert((ulxPERIPHERE_APB2_EnableMask[i] == (ulRegVal & 
+                        ulxPERIPHERE_APB2_EnableMask[i])), "xsysctl API error!"); 
+    }
+
 }
-
-
 //*****************************************************************************
 //
-//! \brief xsysctl 001 test execute main body.
+//! \brief xsysctl 002 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl001Execute(void)
+static void xSysctl002Execute(void)
 {
     SysCtlDelay(100000);
     xsysctl_SysCtlPeripheralEnable_test();
     xsysctl_SysCtlPeripheralDisable_test();
     xsysctl_SysCtlPeripheralReset_test();
+
 }
 
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl001Register = {
-    xSysctl001GetTest,
-    xSysctl001Setup,
-    xSysctl001TearDown,
-    xSysctl001Execute
+const tTestCase sTestXSysctl002Register = {
+    xSysctl002GetTest,
+    xSysctl002Setup,
+    xSysctl002TearDown,
+    xSysctl002Execute
 };
 
 //
@@ -341,6 +349,6 @@ const tTestCase sTestXSysctl001Register = {
 //
 const tTestCase * const psPatternXsysctl02[] =
 {
-    &sTestXSysctl001Register,
+    &sTestXSysctl002Register,
     0
 };

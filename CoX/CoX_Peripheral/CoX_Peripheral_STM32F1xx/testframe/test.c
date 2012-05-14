@@ -447,7 +447,7 @@ TestMain(void)
     PrintLine(TEST_BOARD_NAME);
 #endif
     PrintLine("");
-
+    
     g_bGlobalFail = xfalse;
     i = 0;
     while (g_psPatterns[i]) 

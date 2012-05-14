@@ -306,7 +306,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -315,7 +315,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1709,9 +1709,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\src\Xsysctltest02.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\src\Xsysctltest03.c</name>
       </file>
     </group>
     <group>
