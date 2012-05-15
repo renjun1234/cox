@@ -45,7 +45,7 @@
 #include "xsysctl.h"
 #include "xcore.h"
 
-static unsigned long s_ulExtClockMHz = 12;
+static unsigned long s_ulExtClockMHz = 8;
 
 //*****************************************************************************
 //
@@ -596,7 +596,8 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     //
     // Reset SW, HPRE, PPRE1, PPRE2, ADCPRE and MCO bits
     //
-    xHWREG(RCC_CFGR) &= 0xF0FF0000;
+    //xHWREG(RCC_CFGR) &= 0xF0FF0000;
+    xHWREG(RCC_CFGR) &= 0xF8FF0000;
     
     //
     // Reset HSEON, CSSON and PLLON bits 
@@ -673,7 +674,8 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
             }
             if((ulConfig & SYSCTL_PLL_PWRDN)!=0)
             {
-                xHWREG(RCC_CR) |= RCC_CR_PLLON;
+                //xHWREG(RCC_CR) |= RCC_CR_PLLON;
+                xHWREG(RCC_CR) &= ~RCC_CR_PLLON;
             }
             break;
         }
@@ -709,6 +711,38 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
             break;
         }
     }
+    
+    //
+    //Enable prefetch Buffer 
+    //
+    xHWREG(FLASH_ACR) |= FLASH_ACR_PRFTBS;       
+    
+    if (ulSysClk <= 24000000)
+    {
+        //
+        //Flash 0 wait state
+        //
+        xHWREG(FLASH_ACR) &= ~FLASH_ACR_LATENCY_M;
+        xHWREG(FLASH_ACR) |= FLASH_ACR_LATENCY_0; 
+    }
+    else if(ulSysClk <= 48000000)
+    {
+        //
+        //Flash 1 wait state
+        //
+        xHWREG(FLASH_ACR) &= ~FLASH_ACR_LATENCY_M;
+        xHWREG(FLASH_ACR) |= FLASH_ACR_LATENCY_1;  
+    }
+    else if(ulSysClk <= 72000000)
+    {
+        
+        //
+        //Flash 2 wait state
+        //
+        xHWREG(FLASH_ACR) &= ~FLASH_ACR_LATENCY_M;
+        xHWREG(FLASH_ACR) |= FLASH_ACR_LATENCY_2;  
+    }
+
     xHWREG(RCC_CFGR) &= ~(RCC_CFGR_PPRE2_M | RCC_CFGR_PPRE1_M | RCC_CFGR_HPRE_M);
     if(ulSysClk == ulOscFreq)
     {
@@ -717,10 +751,37 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     else if (ulSysClk < ulOscFreq)
     {
         if((ulOscFreq % ulSysClk) == 0)
-        {
-            xHWREG(RCC_CFGR) |= (ulOscFreq / ulSysClk) << RCC_CFGR_HPRE_S;
-            xHWREG(RCC_CFGR) |= SYSCTL_APB1CLOCK_DIV << RCC_CFGR_PPRE1_S;
-            xHWREG(RCC_CFGR) |= SYSCTL_APB2CLOCK_DIV << RCC_CFGR_PPRE2_S;
+        {            
+            switch(ulOscFreq / ulSysClk)
+            {
+            case 2:
+                xHWREG(RCC_CFGR) |= (8) << RCC_CFGR_HPRE_S;
+                break;
+            case 4:
+                xHWREG(RCC_CFGR) |= (9) << RCC_CFGR_HPRE_S;
+                break;
+            case 8:
+                xHWREG(RCC_CFGR) |= (10) << RCC_CFGR_HPRE_S;
+                break;
+            case 16:
+                xHWREG(RCC_CFGR) |= (11) << RCC_CFGR_HPRE_S;
+                break;
+            case 64:
+                xHWREG(RCC_CFGR) |= (12) << RCC_CFGR_HPRE_S;
+                break;
+            case 128:
+                xHWREG(RCC_CFGR) |= (13) << RCC_CFGR_HPRE_S;
+                break; 
+            case 256:
+                xHWREG(RCC_CFGR) |= (14) << RCC_CFGR_HPRE_S;
+                break;
+            case 512:
+                xHWREG(RCC_CFGR) |= (15) << RCC_CFGR_HPRE_S;
+                break;  
+            defalut:
+                xHWREG(RCC_CFGR) |= (0) << RCC_CFGR_HPRE_S;
+                break;
+            }            
         }
         else
         {
@@ -770,16 +831,23 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
                 return;
             }
         }
+            
+
+               
         xHWREG(RCC_CFGR) |= SYSCTL_APB1CLOCK_DIV << RCC_CFGR_PPRE1_S;
         xHWREG(RCC_CFGR) |= SYSCTL_APB2CLOCK_DIV << RCC_CFGR_PPRE2_S;
+
         xHWREG(RCC_CR) |= RCC_CR_PLLON;
         while((xHWREG(RCC_CR) | RCC_CR_PLLRDY) == 0);
+
         xHWREG(RCC_CFGR) &= ~RCC_CFGR_SW_M;
-        xHWREG(RCC_CFGR) |= 2;
+        xHWREG(RCC_CFGR) |= 0x02;
         while((xHWREG(RCC_CFGR) & RCC_CFGR_SWS_M) != 0x08);
+
         return;
     }
 }
+
 
 //*****************************************************************************
 //

@@ -1816,6 +1816,8 @@ extern unsigned long xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase);
 //
 #define SYSCTL_XTAL_16MHZ       0x00001000  
 
+
+
 //*****************************************************************************
 //
 //! @}
