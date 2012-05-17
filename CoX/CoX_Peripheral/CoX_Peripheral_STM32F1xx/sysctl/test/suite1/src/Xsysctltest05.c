@@ -6,7 +6,7 @@
 //!
 //! <h2>Description</h2>
 //! This module implements the test sequence for the xsysctl sub component.<br><br>
-//! - \p Board: NUC140 <br><br>
+//! - \p Board: MCBSTM32<br><br>
 //! - \p Last-Time(about): 0.5s <br><br>
 //! - \p Phenomenon: Success or failure information will be printed on the UART. <br><br>
 //! .
@@ -35,6 +35,9 @@
 
 #include "test.h"
 #include "xhw_memmap.h"
+
+#define STM32F103VB
+#include "STM32F1XX_TEST.h"
 
 //*****************************************************************************
 //
@@ -67,9 +70,9 @@ xGPIO_PORTC_BASE, xGPIO_PORTD_BASE, xGPIO_PORTE_BASE};
 //! \return the desccription of the xcore001 test.
 //
 //*****************************************************************************
-static char* xSysctl006GetTest(void)
+static char* xSysctl005GetTest(void)
 {
-    return "xsysctl, 006, xsysctl register and test";
+    return "xsysctl, 005, xsysctl register and test";
 }
 
 //*****************************************************************************
@@ -79,7 +82,7 @@ static char* xSysctl006GetTest(void)
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl006Setup(void)
+static void xSysctl005Setup(void)
 {
     SysCtlKeyAddrUnlock();
     //
@@ -115,7 +118,7 @@ static void xSysctl006Setup(void)
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl006TearDown(void)
+static void xSysctl005TearDown(void)
 {   
     unsigned long ulTemp;
     ulTemp = SYSCTL_SYSDIV_1|SYSCTL_XTAL_12MHZ|SYSCTL_OSC_MAIN|SYSCTL_PLL_PWRDN
@@ -227,12 +230,12 @@ static void xsysctl_xSysCtlPeripheralEnable2_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 006 test execute main body.
+//! \brief xsysctl 005 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl006Execute(void)
+static void xSysctl005Execute(void)
 {
     xsysctl_xSysCtlPeripheralEnable2_test();
     xsysctl_xSysCtlPeripheralDisable2_test();   
@@ -242,11 +245,11 @@ static void xSysctl006Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl006Register = {
-    xSysctl006GetTest,
-    xSysctl006Setup,
-    xSysctl006TearDown,
-    xSysctl006Execute
+const tTestCase sTestXSysctl005Register = {
+    xSysctl005GetTest,
+    xSysctl005Setup,
+    xSysctl005TearDown,
+    xSysctl005Execute,
 };
 
 //
@@ -254,6 +257,6 @@ const tTestCase sTestXSysctl006Register = {
 //
 const tTestCase * const psPatternXsysctl05[] =
 {
-    &sTestXSysctl006Register,
+    &sTestXSysctl005Register,
     0
 };

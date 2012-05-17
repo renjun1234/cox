@@ -15,12 +15,12 @@
 void 
 TestIOInit(void)
 {
-    xSysCtlClockSet(48000000, xSYSCTL_OSC_MAIN | xSYSCTL_XTAL_8MHZ);
+    xSysCtlClockSet(72000000, xSYSCTL_OSC_MAIN | xSYSCTL_XTAL_8MHZ);
 
     SysCtlDelay(10000);
 
     xSysCtlPeripheralEnable(xSYSCTL_PERIPH_GPIOA);
-    //xSysCtlPeripheralEnable(SYSCTL_PERIPH_AFIO);
+    xSysCtlPeripheralEnable(SYSCTL_PERIPH_AFIO);
 
     //xSPinTypeUART(UART1RX,PA10);
     xSPinTypeUART(UART1TX,PA9);

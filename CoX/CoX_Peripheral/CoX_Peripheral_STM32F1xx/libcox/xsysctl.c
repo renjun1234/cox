@@ -160,7 +160,7 @@ static const tPeripheralTable g_pPeripherals[] =
     {ADC1_BASE,        xSYSCTL_PERIPH_ADC1,    xINT_ADC0},
     {ADC2_BASE,        xSYSCTL_PERIPH_ADC2,    xINT_ADC0},
     {DMA1_BASE,        xSYSCTL_PERIPH_DMA1,    xINT_DMA1},
-    {DMA2_BASE,        xSYSCTL_PERIPH_DMA2,    xINT_DMA1},
+    {DMA2_BASE,        xSYSCTL_PERIPH_DMA2,    xINT_DMA2},
     {GPIOA_BASE,       xSYSCTL_PERIPH_GPIOA,   xINT_GPIOA},
     {GPIOB_BASE,       xSYSCTL_PERIPH_GPIOB,   xINT_GPIOA},
     {GPIOC_BASE,       xSYSCTL_PERIPH_GPIOC,   xINT_GPIOA},
@@ -546,8 +546,49 @@ xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase)
     //
     // Check the arguments.
     //
-    xASSERT((ulPeripheralBase == xGPIO_PORTA_BASE)       
-            );
+    xASSERT(
+        (ulPeripheralBase == xFLASH_BASE     )|| 
+        (ulPeripheralBase == xSRAM_BASE      )|| 
+        (ulPeripheralBase == xWDT_BASE       )|| 
+        (ulPeripheralBase == xGPIO_PORTA_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTB_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTC_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTD_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTE_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTF_BASE)|| 
+        (ulPeripheralBase == xGPIO_PORTG_BASE)|| 
+        (ulPeripheralBase == xUART1_BASE     )|| 
+        (ulPeripheralBase == xUART2_BASE     )|| 
+        (ulPeripheralBase == xUART3_BASE     )|| 
+        (ulPeripheralBase == xUART4_BASE     )|| 
+        (ulPeripheralBase == xUART5_BASE     )|| 
+        (ulPeripheralBase == xTIMER1_BASE    )|| 
+        (ulPeripheralBase == xTIMER2_BASE    )|| 
+        (ulPeripheralBase == xTIMER3_BASE    )|| 
+        (ulPeripheralBase == xTIMER4_BASE    )|| 
+        (ulPeripheralBase == xTIMER5_BASE    )|| 
+        (ulPeripheralBase == xTIMER6_BASE    )|| 
+        (ulPeripheralBase == xTIMER7_BASE    )|| 
+        (ulPeripheralBase == xTIMER8_BASE    )|| 
+        (ulPeripheralBase == xTIMER9_BASE    )|| 
+        (ulPeripheralBase == xTIMER10_BASE   )|| 
+        (ulPeripheralBase == xTIMER11_BASE   )|| 
+        (ulPeripheralBase == xTIMER12_BASE   )|| 
+        (ulPeripheralBase == xTIMER13_BASE   )|| 
+        (ulPeripheralBase == xTIMER14_BASE   )|| 
+        (ulPeripheralBase == xSPI1_BASE      )|| 
+        (ulPeripheralBase == xSPI2_BASE      )|| 
+        (ulPeripheralBase == xSPI3_BASE      )|| 
+        (ulPeripheralBase == xI2C1_BASE      )|| 
+        (ulPeripheralBase == xI2C2_BASE      )|| 
+        (ulPeripheralBase == xADC1_BASE      )|| 
+        (ulPeripheralBase == xADC2_BASE      )|| 
+        (ulPeripheralBase == xACMP0_BASE     )|| 
+        (ulPeripheralBase == xPWMA_BASE      )|| 
+        (ulPeripheralBase == xPWMB_BASE      )|| 
+        (ulPeripheralBase == xDMA1_BASE      ) 
+);
+
             
     for(i=0; g_pPeripherals[i].ulPeripheralBase != 0; i++)
     {
@@ -636,7 +677,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     //
     xHWREG(RCC_CIR) &= 0x00FF0000;
 
-    xHWREG(RCC_CIR) |= 0x00001800;
+    //xHWREG(RCC_CIR) |= 0x00001800;
 
     //
     // 
@@ -758,6 +799,8 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     }
 
     xHWREG(RCC_CFGR) &= ~(RCC_CFGR_PPRE2_M | RCC_CFGR_PPRE1_M | RCC_CFGR_HPRE_M);
+    xHWREG(RCC_CFGR) |= SYSCTL_APB1CLOCK_DIV << RCC_CFGR_PPRE1_S;
+    xHWREG(RCC_CFGR) |= SYSCTL_APB2CLOCK_DIV << RCC_CFGR_PPRE2_S;
     if(ulSysClk == ulOscFreq)
     {
         return;
@@ -824,17 +867,12 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
                 return;
             }
         }
-            
-
-               
-        xHWREG(RCC_CFGR) |= SYSCTL_APB1CLOCK_DIV << RCC_CFGR_PPRE1_S;
-        xHWREG(RCC_CFGR) |= SYSCTL_APB2CLOCK_DIV << RCC_CFGR_PPRE2_S;
 
         xHWREG(RCC_CR) |= RCC_CR_PLLON;
         while((xHWREG(RCC_CR) | RCC_CR_PLLRDY) == 0);
 
         xHWREG(RCC_CFGR) &= ~RCC_CFGR_SW_M;
-        xHWREG(RCC_CFGR) |= 0x02;
+        xHWREG(RCC_CFGR) |= RCC_CFGR_SW_PLL;
         while((xHWREG(RCC_CFGR) & RCC_CFGR_SWS_M) != 0x08);
 
         return;

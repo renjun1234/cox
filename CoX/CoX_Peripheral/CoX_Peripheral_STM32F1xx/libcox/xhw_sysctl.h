@@ -569,7 +569,7 @@
 //
 //! System clock switch status mask
 //
-#define RCC_CFGR_SWS_M          0x0000000CUL
+#define RCC_CFGR_SWS_M          0x0000000C
 
 //
 //! System clock switch status shift
@@ -585,6 +585,22 @@
 //! System clock switch shift
 //
 #define RCC_CFGR_SW_S           0
+
+
+//
+//! Select HSI as System Clock 
+//
+#define RCC_CFGR_SW_HSI         0x00000000
+
+//
+//! Select HSE as System Clock
+//
+#define RCC_CFGR_SW_HSE         0x00000001
+
+//
+//! Select PLL as System Clock
+//
+#define RCC_CFGR_SW_PLL         0x00000002
 
 
 //*****************************************************************************

@@ -362,16 +362,16 @@ static void xSysctl012Execute(void)
 const tTestCase sTestXSysctl011Register = {
     xSysctl011GetTest,
     xSysctl011Setup,
-    xSysctl011Execute,
     xSysctl011TearDown,
+    xSysctl011Execute,
 };
 
 
 const tTestCase sTestXSysctl012Register = {
     xSysctl012GetTest,
     xSysctl012Setup,    
-    xSysctl012Execute,
     xSysctl012TearDown,
+    xSysctl012Execute,
 };
 //
 // Xsysctl test suits.

@@ -341,7 +341,7 @@ const tTestCase sTestXSysctl002Register = {
     xSysctl002GetTest,
     xSysctl002Setup,
     xSysctl002TearDown,
-    xSysctl002Execute
+    xSysctl002Execute,
 };
 
 //

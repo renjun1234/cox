@@ -80,7 +80,6 @@ static void xSysctl03Setup(void)
     xHWREG(PWR_CR)   |=   PWR_CR_DBP;   
 }
 
-
 //*****************************************************************************
 //
 //! \brief something should do after the test execute of xsysctl03 test.
@@ -247,7 +246,8 @@ const tTestCase sTestXSysctl03Register = {
     xSysctl03GetTest,
     xSysctl03Setup,
     xSysctl03TearDown,
-    xSysctl03Execute
+    xSysctl03Execute,
+    
 };
 
 //

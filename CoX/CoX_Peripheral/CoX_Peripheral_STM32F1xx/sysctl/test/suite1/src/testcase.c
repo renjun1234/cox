@@ -1,5 +1,6 @@
 //*****************************************************************************
 //
+//
 //! \file testcase.c
 //! \brief add new testcases.
 //! \version 1.0
@@ -26,9 +27,10 @@ const tTestCase * const* g_psPatterns[] =  {
     //psPatternXsysctl,
     //psPatternXsysctl01,
     //psPatternXsysctl02,
-    psPatternXsysctl03,
-    //psPatternXsysctl04,
+    //psPatternXsysctl03,
+    psPatternXsysctl04,
     //psPatternXsysctl05,
+    //psPatternXsysctl06,
     //
     // end
     //
