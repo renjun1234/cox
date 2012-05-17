@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=1001423651
+Checksum=1462936660
 [DisAssemblyWindow]
 NumStates=_ 1
 State 1=_ 1
@@ -51,7 +51,7 @@ LogFile=_ ""
 Enabled=0
 [DriverProfiling]
 Enabled=0
-Mode=133551344
+Mode=0
 Graph=0
 [Disassemble mode]
 mode=0

@@ -124,6 +124,18 @@ static volatile const unsigned char g_APBAHBPrescTable[16] =
        {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};
 static volatile const unsigned char g_ADCPrescTable[4] = {2, 4, 6, 8};
 
+static const unsigned char g_AHBPrescTable[9] = 
+{
+    15,
+    14,
+    13,
+    12,
+    0,
+    11,
+    10,
+    9,
+    8,
+};
 //*****************************************************************************
 //
 //! Peripheral Base and ID Table structure type
@@ -624,8 +636,10 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     //
     xHWREG(RCC_CIR) &= 0x00FF0000;
 
+    xHWREG(RCC_CIR) |= 0x00001800;
+
     //
-    // Disable all interrupts and clear pending bits
+    // 
     //
     xHWREG(RCC_CFGR2) = 0x00000000; 
     
@@ -752,36 +766,15 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     {
         if((ulOscFreq % ulSysClk) == 0)
         {            
-            switch(ulOscFreq / ulSysClk)
-            {
-            case 2:
-                xHWREG(RCC_CFGR) |= (8) << RCC_CFGR_HPRE_S;
-                break;
-            case 4:
-                xHWREG(RCC_CFGR) |= (9) << RCC_CFGR_HPRE_S;
-                break;
-            case 8:
-                xHWREG(RCC_CFGR) |= (10) << RCC_CFGR_HPRE_S;
-                break;
-            case 16:
-                xHWREG(RCC_CFGR) |= (11) << RCC_CFGR_HPRE_S;
-                break;
-            case 64:
-                xHWREG(RCC_CFGR) |= (12) << RCC_CFGR_HPRE_S;
-                break;
-            case 128:
-                xHWREG(RCC_CFGR) |= (13) << RCC_CFGR_HPRE_S;
-                break; 
-            case 256:
-                xHWREG(RCC_CFGR) |= (14) << RCC_CFGR_HPRE_S;
-                break;
-            case 512:
-                xHWREG(RCC_CFGR) |= (15) << RCC_CFGR_HPRE_S;
-                break;  
-            defalut:
-                xHWREG(RCC_CFGR) |= (0) << RCC_CFGR_HPRE_S;
-                break;
-            }            
+            int i = 0;
+            for (i = 8; i >= 0; i--)
+             {
+                 if((ulOscFreq/ulSysClk) & (1<<i))
+                 {
+                     xHWREG(RCC_CFGR) |= (g_AHBPrescTable[i]) << RCC_CFGR_HPRE_S;
+                     break;
+                 }
+             }          
         }
         else
         {

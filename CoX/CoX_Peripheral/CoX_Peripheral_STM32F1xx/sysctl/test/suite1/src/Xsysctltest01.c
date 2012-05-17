@@ -37,7 +37,7 @@
 #include "test.h"
 #include "xhw_memmap.h"
 #define STM32F103VB
-#include "STM32F1XX.h"
+#include "STM32F1XX_TEST.h"
 //*****************************************************************************
 //
 //!\page test_xsysctl_register test_xsysctl_register
@@ -61,10 +61,20 @@ static char* xSysctl011GetTest(void)
     return "xsysctl, 011, SysCtl Peripheral Int Enable/Disable test";
 }
 
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl012 register test.
+//!
+//! \return the desccription of the xcore012 test.
+//
+//*****************************************************************************
+
 static char* xSysctl012GetTest(void)
 {
     return "xsysctl, 012, SysCtl Peripheral Int Flag Clear/Get test";
 }
+
 
 //*****************************************************************************
 //
@@ -81,6 +91,61 @@ static void xSysctl011Setup(void)
 
 //*****************************************************************************
 //
+//! \brief something should do before the test execute of xsysctl012 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl012Setup(void)
+{
+    volatile long int i = 0;
+    //
+    // Reset HSI Clock Param
+    //
+    xHWREG(RCC_CR)  &= ~RCC_CR_HSION;    
+    xHWREG(RCC_CIR) &= ~RCC_CIR_HSIRDYIE;
+    xHWREG(RCC_CIR) |=  RCC_CIR_HSIRDYC;
+    while((xHWREG(RCC_CR) & RCC_CR_HSIRDY) != 0);
+    xHWREG(RCC_CIR) &=  ~RCC_CIR_HSIRDYC;
+    
+    //
+    // Reset LSI Clock Param
+    //
+    xHWREG(RCC_CSR) &= ~RCC_CSR_LSION;
+    xHWREG(RCC_CIR) &= ~RCC_CIR_LSIRDYIE;
+    xHWREG(RCC_CIR) |=  RCC_CIR_LSIRDYC;
+    while((xHWREG(RCC_CSR) & RCC_CSR_LSIRDY) != 0);
+    xHWREG(RCC_CIR) &=  ~RCC_CIR_LSIRDYC;
+
+    //
+    // Reset LSE Clock Param
+    //
+
+    xHWREG(RCC_APB1ENR)   |= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
+    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
+    xHWREG(PWR_CR)   |=  PWR_CR_DBP;
+    
+    xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
+    while(i++ < 5);
+    xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
+    
+    xHWREG(RCC_BDCR) &= ~RCC_BDCR_LSEON;
+    xHWREG(RCC_CIR)  &= ~RCC_CIR_LSERDYIE;
+    xHWREG(RCC_CIR)  |=  RCC_CIR_LSERDYC;
+    while((xHWREG(RCC_BDCR) & RCC_BDCR_LSERDY) != 0);
+    xHWREG(RCC_CIR)  &=  ~RCC_CIR_LSERDYC;
+
+    //
+    //In order to test PLL and HSE Clock successfuly, you must conform PLL HSE
+    //interrupt enable bits have been set.
+    //for example : add xHWREG(RCC_CIR) |= 0x00001800; in SysCtlClockSet function
+    //
+
+    // PLL HSE IS ALREADY SET IN SysCtlClockSet FUNCTION
+}
+
+//*****************************************************************************
+//
 //! \brief something should do after the test execute of xsysctl011 test.
 //!
 //! \return None.
@@ -91,6 +156,53 @@ static void xSysctl011TearDown(void)
 
 }
 
+
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl012 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl012TearDown(void)
+{   
+    volatile unsigned long i = 0;
+    
+    //
+    // Reset HSI Clock Param
+    //
+    xHWREG(RCC_CR)  &= ~RCC_CR_HSION;    
+    xHWREG(RCC_CIR) &= ~RCC_CIR_HSIRDYIE;
+    xHWREG(RCC_CIR) |=  RCC_CIR_HSIRDYC;
+    while((xHWREG(RCC_CR) & RCC_CR_HSIRDY) != 0);
+    xHWREG(RCC_CIR) &=  ~RCC_CIR_HSIRDYC;    
+    //
+    // Reset LSI Clock Param
+    //
+    xHWREG(RCC_CSR) &= ~RCC_CSR_LSION;
+    xHWREG(RCC_CIR) &= ~RCC_CIR_LSIRDYIE;
+    xHWREG(RCC_CIR) |=  RCC_CIR_LSIRDYC;
+    while((xHWREG(RCC_CSR) & RCC_CSR_LSIRDY) != 0);
+    xHWREG(RCC_CIR) &=  ~RCC_CIR_LSIRDYC;
+
+    //
+    // Reset LSE Clock Param
+    //
+    xHWREG(PWR_CR)   |=  PWR_CR_DBP;
+    
+    xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
+    while(i++ < 5);
+    xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
+    
+    xHWREG(RCC_BDCR) &= ~RCC_BDCR_LSEON;
+    xHWREG(RCC_CIR)  &= ~RCC_CIR_LSERDYIE;
+    xHWREG(RCC_CIR)  |=  RCC_CIR_LSERDYC;
+    while((xHWREG(RCC_BDCR) & RCC_BDCR_LSERDY) != 0);
+    xHWREG(RCC_CIR)  &=  ~RCC_CIR_LSERDYC;
+    xHWREG(RCC_APB1ENR)  &= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
+
+}
 
 //*****************************************************************************
 //
@@ -140,7 +252,84 @@ static void xsysctl_SysCtlIntDisable_test(void)
 }
 
 
+//*****************************************************************************
+//
+//! \brief xsysctl 012 test of Get system control interrrupts Flag
+//! \param void
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xsysctl_SysCtlIntFlagGet_test(void)
+{
+    unsigned long ulTmp = 0;
 
+    xHWREG(RCC_CIR) |= RCC_CIR_HSIRDYIE;
+    xHWREG(RCC_CR)  |= RCC_CR_HSION;
+    while((xHWREG(RCC_CR) & RCC_CR_HSIRDY) == 0);
+    ulTmp = SysCtlIntFlagGet();
+    TestAssert((0 != (ulTmp & RCC_CIR_HSIRDYF)),
+            "xsysctl API SysCtlIntFlagGet error!");
+
+
+    xHWREG(RCC_CIR) |= RCC_CIR_LSIRDYIE;
+    xHWREG(RCC_CSR) |= RCC_CSR_LSION;
+    while((xHWREG(RCC_CSR) & RCC_CSR_LSIRDY) == 0);
+    ulTmp = SysCtlIntFlagGet();
+    TestAssert((0 != (ulTmp & RCC_CIR_LSIRDYF)),
+            "xsysctl API SysCtlIntFlagGet error!");
+
+    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
+    xHWREG(PWR_CR)   |= PWR_CR_DBP;
+    xHWREG(RCC_CIR)  |= RCC_CIR_LSERDYIE;
+    xHWREG(RCC_BDCR) |= RCC_BDCR_LSEON;
+    while((xHWREG(RCC_BDCR) & RCC_BDCR_LSERDY) == 0);
+    ulTmp = SysCtlIntFlagGet();
+    TestAssert((0 != (ulTmp & RCC_CIR_LSERDYF)),
+            "xsysctl API SysCtlIntFlagGet error!");
+
+    ulTmp = SysCtlIntFlagGet();
+    TestAssert((0 != (ulTmp & RCC_CIR_PLLRDYF)),
+            "xsysctl API SysCtlIntFlagGet error!");
+
+    ulTmp = SysCtlIntFlagGet();
+    TestAssert((0 != (ulTmp & RCC_CIR_HSERDYF)),
+            "xsysctl API SysCtlIntFlagGet error!");
+}
+
+//*****************************************************************************
+//
+//! \brief xsysctl 012 test of Clear system control interrrupts Flag
+//! \param void
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xsysctl_SysCtlIntFlagClear_test(void)
+{
+    unsigned long ulTmp = 0;
+    SysCtlIntFlagClear(SYSCTL_INT_HSI);
+    TestAssert((0 == (ulTmp & RCC_CIR_HSIRDYF)),
+            "xsysctl API SysCtlIntFlagClear error!");
+
+
+    SysCtlIntFlagClear(SYSCTL_INT_LSI);
+    TestAssert((0 == (ulTmp & RCC_CIR_LSIRDYF)),
+            "xsysctl API SysCtlIntFlagClear error!");
+
+    SysCtlIntFlagClear(SYSCTL_INT_LSE);
+    TestAssert((0 == (ulTmp & RCC_CIR_LSERDYF)),
+            "xsysctl API SysCtlIntFlagClear error!");
+
+    SysCtlIntFlagClear(SYSCTL_INT_PLL);
+    TestAssert((0 == (ulTmp & RCC_CIR_PLLRDYF)),
+            "xsysctl API SysCtlIntFlagClear error!");
+
+    SysCtlIntFlagClear(SYSCTL_INT_HSE);
+    TestAssert((0 == (ulTmp & RCC_CIR_HSERDYF)),
+            "xsysctl API SysCtlIntFlagClear error!");
+
+}
 //*****************************************************************************
 //
 //! \brief xsysctl 011 test execute main body.
@@ -154,21 +343,42 @@ static void xSysctl011Execute(void)
     xsysctl_SysCtlIntDisable_test();    
 }
 
+//*****************************************************************************
+//
+//! \brief xsysctl 012 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl012Execute(void)
+{
+    xsysctl_SysCtlIntFlagGet_test();
+    xsysctl_SysCtlIntFlagClear_test();
+}
+
 //
 // xsysctl register test case struct.
 //
 const tTestCase sTestXSysctl011Register = {
-		xSysctl011GetTest,
-		xSysctl011Setup,
-		xSysctl011TearDown,
-		xSysctl011Execute
+    xSysctl011GetTest,
+    xSysctl011Setup,
+    xSysctl011Execute,
+    xSysctl011TearDown,
 };
 
+
+const tTestCase sTestXSysctl012Register = {
+    xSysctl012GetTest,
+    xSysctl012Setup,    
+    xSysctl012Execute,
+    xSysctl012TearDown,
+};
 //
 // Xsysctl test suits.
 //
 const tTestCase * const psPatternXsysctl01[] =
 {
     &sTestXSysctl011Register,
+    &sTestXSysctl012Register,
     0
 };

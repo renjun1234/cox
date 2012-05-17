@@ -222,8 +222,8 @@ unsigned long ulMCOClkSource[] =
 // note: the element of array must in special order
 // 1:   SYSCTL_INT_LSI,
 // 2:   SYSCTL_INT_LSE,
-// 3:   SYSCTL_INT_HSE,
-// 4:   SYSCTL_INT_HSI,
+// 3:   SYSCTL_INT_HSI,
+// 4:   SYSCTL_INT_HSE,
 // 5:   SYSCTL_INT_PLL,
 // 6:   SYSCTL_INT_PLL2
 // 7:   SYSCTL_INT_PLL3
@@ -232,8 +232,8 @@ unsigned long ulSysCtlIntPara[] =
 {
     SYSCTL_INT_LSI,
     SYSCTL_INT_LSE,
-    SYSCTL_INT_HSE,
     SYSCTL_INT_HSI,
+    SYSCTL_INT_HSE,
     SYSCTL_INT_PLL,
     //SYSCTL_INT_PLL2
     //SYSCTL_INT_PLL3

@@ -50,46 +50,63 @@
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl003 register test.
+//! \brief Get the Test description of xsysctl03 register test.
 //!
-//! \return the desccription of the xsysctl003 test.
+//! \return the desccription of the xsysctl03 test.
 //
 //*****************************************************************************
-static char* xSysctl003GetTest(void)
+static char* xSysctl03GetTest(void)
 {
-    return "xsysctl, 003, xsysctl register and api test";
+    return "xsysctl, 03, xsysctl register and api test";
 }
 
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl003 test.
+//! \brief something should do before the test execute of xsysctl03 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl003Setup(void)
+static void xSysctl03Setup(void)
 {
-    SysCtlLSIConfig(SYSCTL_LSI_OSC_EN);
-    SysCtlLSEConfig(SYSCTL_LSE_OSC_EN);
+    //
+    // Setup PWR BKP Clock Source and Reset Backup Domain
+    // 
+    //
+
+    xHWREG(RCC_APB1ENR)   |= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);    
+    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
+    xHWREG(PWR_CR)   |=   PWR_CR_DBP;   
 }
 
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl003 test.
+//! \brief something should do after the test execute of xsysctl03 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl003TearDown(void)
+static void xSysctl03TearDown(void)
 {   
-
+     volatile unsigned long i = 0;
+     
+    //
+    // Reset Backup Domain and Disable PWR BKP Clock source
+    //
+    xHWREG(PWR_CR)   |=  PWR_CR_DBP;
+    
+    xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
+    while(i++ < 5);
+    xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
+    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR)  &= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
 }
 
 //*****************************************************************************
 //
-//! \brief xsysctl 003 test of Peripheral Clock Source Set test .
+//! \brief xsysctl 03 test of Peripheral Clock Source Set test .
 //!
 //! \return None.
 //
@@ -98,7 +115,8 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
 {
     unsigned long i,ulTemp;
     volatile unsigned long ulWait = 0;
-    unsigned long ulArraySize = 0
+    unsigned long ulArraySize = 0;
+    
 
     //
     // Test for RTC source
@@ -109,9 +127,17 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         //
         // Reset Backup Domain
         //
-        xHWREG(RCC_BDCR) &= ~(0x00010000UL);
-        xHWREG(RCC_BDCR) |=  (0x00010000UL);
-
+        
+        xHWREG(RCC_BDCR) |=  (RCC_BDCR_BDRST);
+        //
+        // 0 <= Wait state <= 3
+        // Idle loop 
+        for(ulWait = 0; ulWait < 3; ulWait++)
+        {
+            ;
+        }
+        xHWREG(RCC_BDCR) &= ~(RCC_BDCR_BDRST);
+        
         //
         // Select RTC source, 
         // note: once selected , it cannot be change anymore unless RESET Backup
@@ -204,12 +230,12 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 003 test execute main body.
+//! \brief xsysctl 03 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl003Execute(void)
+static void xSysctl03Execute(void)
 {
     xsysctl_SysCtlPeripheralClockSourceSet_test();
 }
@@ -217,11 +243,11 @@ static void xSysctl003Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl003Register = {
-    xSysctl003GetTest,
-    xSysctl003Setup,
-    xSysctl003TearDown,
-    xSysctl003Execute
+const tTestCase sTestXSysctl03Register = {
+    xSysctl03GetTest,
+    xSysctl03Setup,
+    xSysctl03TearDown,
+    xSysctl03Execute
 };
 
 //
@@ -229,6 +255,6 @@ const tTestCase sTestXSysctl003Register = {
 //
 const tTestCase * const psPatternXsysctl03[] =
 {
-    &sTestXSysctl003Register,
+    &sTestXSysctl03Register,
     0
 };
