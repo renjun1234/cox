@@ -912,7 +912,7 @@ extern unsigned long xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase);
 //! |                    |number such as          |number such as             |
 //! |                    |0 1 2 3 ....            |0 1 2 3 ....               |
 //! |--------------------|------------------------|---------------------------|
-//! |       STM32F1xx       |    ADC0                |MAIN PLL INT               |
+//! |       STM32F1xx       |    ADC0                |MAIN PLL INT            |
 //! |                    |    PWMB                |INT HCLK EXTSL MAIN        |
 //! |                    |    PWMA                |INT HCLK EXTSL MAIN        |
 //! |                    |    FRQDIV              |INT HCLK EXTSL MAIN        |
@@ -931,10 +931,9 @@ extern unsigned long xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase);
 //!
 //! \return None.
 //
-//*****************************************************************************                                          unsigned long ulDivide);
+//*****************************************************************************
 #define xSysCtlPeripheralClockSourceSet2(ePeripheral, eSrc, ulDivide)         \
         SysCtlIPClockSourceSetConvert(ePeripheral, eSrc, ulDivide)
-
 
 //*****************************************************************************
 //

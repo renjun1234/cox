@@ -89,15 +89,13 @@ static void xSysctl03Setup(void)
 //*****************************************************************************
 static void xSysctl03TearDown(void)
 {   
-     volatile unsigned long i = 0;
-     
     //
     // Reset Backup Domain and Disable PWR BKP Clock source
     //
     xHWREG(PWR_CR)   |=  PWR_CR_DBP;
     
     xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
-    while(i++ < 5);
+    SysCtlDelay(5);
     xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
     xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
     xHWREG(RCC_APB1ENR)  &= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
@@ -113,7 +111,6 @@ static void xSysctl03TearDown(void)
 static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
 {
     unsigned long i,ulTemp;
-    volatile unsigned long ulWait = 0;
     unsigned long ulArraySize = 0;
     
 
@@ -129,12 +126,9 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         
         xHWREG(RCC_BDCR) |=  (RCC_BDCR_BDRST);
         //
-        // 0 <= Wait state <= 3
+        // 0 <= Wait state <= 5
         // Idle loop 
-        for(ulWait = 0; ulWait < 3; ulWait++)
-        {
-            ;
-        }
+        SysCtlDelay(5);
         xHWREG(RCC_BDCR) &= ~(RCC_BDCR_BDRST);
         
         //
@@ -145,12 +139,10 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         SysCtlPeripheralClockSourceSet(ulRTCSource[i]);
 
         //
-        // 0 <= Wait state <= 3
+        // 0 <= Wait state <= 5
         // Idle loop 
-        for(ulWait = 0; ulWait < 3; ulWait++)
-        {
-            ;
-        }
+        SysCtlDelay(5);
+        
         ulTemp = xHWREG(RCC_BDCR);
         TestAssert(((i+1) == ((ulTemp & RCC_BDCR_RTCSEL_M) >> RCC_BDCR_RTCSEL_S)),
                    "xsysctl API error!");
@@ -169,16 +161,15 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         {
             ;
         }
+    SysCtlDelay(5);
 
         //
         // Select MCO Clock Source
-        // Note: 0 <= waitstate <= 3
+        // Note: 0 <= waitstate <= 5
         //
         SysCtlPeripheralClockSourceSet(ulMCOClkSource[i]);
-        for(ulWait = 0; ulWait < 3; ulWait++) 
-        {
-            ;
-        }
+        SysCtlDelay(5);
+        
         ulTemp = xHWREG(RCC_CFGR);
         TestAssert((i+4) == (((ulTemp & RCC_CFGR_MCO_M) >> RCC_CFGR_MCO_S)),
                    "xsysctl API error!");

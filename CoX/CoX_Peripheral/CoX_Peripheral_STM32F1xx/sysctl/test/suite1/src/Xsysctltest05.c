@@ -48,26 +48,58 @@
 //!
 //
 //*****************************************************************************
-unsigned long ulPeriprerAddr[] = { 
-xWDT_BASE, xUART0_BASE, xUART1_BASE, xUART2_BASE, xTIMER0_BASE, xTIMER1_BASE, 
-xTIMER2_BASE, xTIMER3_BASE, xSPI0_BASE, xSPI1_BASE, xSPI2_BASE, xSPI3_BASE,
-xI2C0_BASE, xI2C1_BASE, xADC0_BASE, xACMP0_BASE};
 
-unsigned long ulxPeriphEnableMask[] = {
-SYSCLK_APBCLK_WDCLK_EN, SYSCLK_APBCLK_UART0_EN, SYSCLK_APBCLK_UART1_EN,
-SYSCLK_APBCLK_UART2_EN,SYSCLK_APBCLK_TMR0_EN, SYSCLK_APBCLK_TMR1_EN,
-SYSCLK_APBCLK_TMR2_EN, SYSCLK_APBCLK_TMR3_EN, SYSCLK_APBCLK_SPI0_EN,
-SYSCLK_APBCLK_SPI1_EN, SYSCLK_APBCLK_SPI2_EN, SYSCLK_APBCLK_SPI3_EN,
-SYSCLK_APBCLK_I2C0_EN, SYSCLK_APBCLK_I2C1_EN, SYSCLK_APBCLK_ADC_EN,
-SYSCLK_APBCLK_ACMP_EN};
+unsigned long ulBackupDataAddr[] = 
+{
+    BKP_DR1 ,       // medium-density and low-density devices
+    BKP_DR2 ,
+    BKP_DR3 ,
+    BKP_DR4 ,
+    BKP_DR5 ,
+    BKP_DR6 ,
+    BKP_DR7 ,
+    BKP_DR8 ,
+    BKP_DR9 ,
+    BKP_DR10,       
 
-unsigned long ulGPIOBaseAddr[] = {xGPIO_PORTA_BASE, xGPIO_PORTB_BASE, 
-xGPIO_PORTC_BASE, xGPIO_PORTD_BASE, xGPIO_PORTE_BASE};
+    BKP_DR11,      // high-density, XL-density and connectivity line devices
+    BKP_DR12,
+    BKP_DR13,
+    BKP_DR14,
+    BKP_DR15,
+    BKP_DR16,
+    BKP_DR17,
+    BKP_DR18,
+    BKP_DR19,
+    BKP_DR20,
+    BKP_DR21,
+    BKP_DR22,
+    BKP_DR23,
+    BKP_DR24,
+    BKP_DR25,
+    BKP_DR26,
+    BKP_DR27,
+    BKP_DR28,
+    BKP_DR29,
+    BKP_DR30,
+    BKP_DR31,
+    BKP_DR32,
+    BKP_DR33,
+    BKP_DR34,
+    BKP_DR35,
+    BKP_DR36,
+    BKP_DR37,
+    BKP_DR38,
+    BKP_DR39,
+    BKP_DR40,
+    BKP_DR41,
+    BKP_DR42,
+};
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl001 register test.
+//! \brief Get the Test description of xsysctl005 register test.
 //!
-//! \return the desccription of the xcore001 test.
+//! \return the desccription of the xcore005 test.
 //
 //*****************************************************************************
 static char* xSysctl005GetTest(void)
@@ -77,156 +109,75 @@ static char* xSysctl005GetTest(void)
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl001 test.
+//! \brief something should do before the test execute of xsysctl005 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
 static void xSysctl005Setup(void)
 {
-    SysCtlKeyAddrUnlock();
-    //
-    // Enable external 12 MHz high speed crystal
-    //
-    xHWREG(SYSCLK_PWRCON) |= SYSCLK_PWRCON_XTL12M_EN;
-    //
-    // Enable external 32.768 kHz low speed crystal
-    //
-    xHWREG(SYSCLK_PWRCON) |= SYSCLK_PWRCON_XTL32K_EN;
-    //
-    // Enable internal 22.1184 MHz high speed oscillator
-    //
-    xHWREG(SYSCLK_PWRCON) |= SYSCLK_PWRCON_OSC22M_EN;
-    //
-    // Enable internal 10 kHz low speed oscillator
-    //
-    xHWREG(SYSCLK_PWRCON) |= SYSCLK_PWRCON_OSC10K_EN;
-    //
-    // PLL FOUT enable
-    //
-    xHWREG(SYSCLK_PLLCON) &= ~SYSCLK_PLLCON_OE;
-    //
-    // PLL is in normal mode
-    //
-    xHWREG(SYSCLK_PLLCON) &= ~SYSCLK_PLLCON_PD;
+    unsigned long  i = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = (unsigned long) i;
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
+                "Backup domain write Error");
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = (unsigned long) i;
+    }  
+    TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
+            "Backup domain write Error");
+#endif
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl001 test.
+//! \brief something should do after the test execute of xsysctl005 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
 static void xSysctl005TearDown(void)
 {   
-    unsigned long ulTemp;
-    ulTemp = SYSCTL_SYSDIV_1|SYSCTL_XTAL_12MHZ|SYSCTL_OSC_MAIN|SYSCTL_PLL_PWRDN
-                                                           | SYSCTL_INT_OSC_DIS;
-    SysCtlHClockSet(ulTemp);
 
-    SysCtlPeripheralClockSourceSet(SYSCTL_PERIPH_UART_S_EXT12M);
-    SysCtlIPClockDividerSet(SYSCTL_PERIPH_UART_D|1);
 }
 
 //*****************************************************************************
 //
-//! \brief xsysctl 002 test of Peripheral Disable test .
+//! \brief xsysctl 005 test of Peripheral Disable test .
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xsysctl_xSysCtlPeripheralDisable2_test(void)
+static void xsysctl_SysCtlBackupDomainReset_test(void)
 {
-    unsigned long ulTemp,ulRegVal,i;
-    
-    for(i = 0; i < 16; i++)
-    {
-        ulTemp = xHWREG(SYSCLK_APBCLK);
-        xSysCtlPeripheralDisable2(ulPeriprerAddr[i]);
-        ulRegVal = xHWREG(SYSCLK_APBCLK);
-        TestAssert((0 == (ulRegVal & ulxPeriphEnableMask[i]) && 
-        ((ulTemp & (~ulxPeriphEnableMask[i]))==ulRegVal)), "xsysctl API error!");        
-    }
-    
-    for(i = 0; i < 5; i++)
-    {
-        ulTemp = xHWREG(SYSCLK_APBCLK);
-        xSysCtlPeripheralDisable2(ulGPIOBaseAddr[i]);
-        ulRegVal = xHWREG(SYSCLK_APBCLK);
-        TestAssert((0 == (ulRegVal & 0) && ((ulTemp & (~0)) == ulRegVal)),
-                                                          "xsysctl API error!");        
-    }
+    unsigned long  i = 0;
 
-    ulTemp = xHWREG(SYSCLK_APBCLK);
-    xSysCtlPeripheralDisable2(PWMA_BASE);
-    ulRegVal = xHWREG(SYSCLK_APBCLK);
-    TestAssert((0 == (ulRegVal & SYSCLK_APBCLK_PWM01_EN & SYSCLK_APBCLK_PWM23_EN)
-    &&((ulTemp & (~SYSCLK_APBCLK_PWM01_EN) & (~SYSCLK_APBCLK_PWM23_EN)) == ulRegVal)),
-                                                          "xsysctl API error!");
- 
-    ulTemp = xHWREG(SYSCLK_APBCLK);
-    xSysCtlPeripheralDisable2(PWMB_BASE);
-    ulRegVal = xHWREG(SYSCLK_APBCLK);
-    TestAssert((0 == (ulRegVal & SYSCLK_APBCLK_PWM45_EN & SYSCLK_APBCLK_PWM67_EN)
-    &&((ulTemp & (~SYSCLK_APBCLK_PWM45_EN) & (~SYSCLK_APBCLK_PWM67_EN)) == ulRegVal)),
-                                                          "xsysctl API error!");
-
-}
-//*****************************************************************************
-//
-//! \brief xsysctl 002 test of Peripheral reset test .
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xsysctl_xSysCtlPeripheralReset2_test(void)
-{
-    unsigned long i;
-    
-    for(i = 0; i <= 15; i++)
+    SysCtlBackupDomainReset();
+    for(i = 0; i < 10; i++) 
     {
-        xSysCtlPeripheralReset2(ulPeriprerAddr[i]);
-        TestAssert( (0 == xHWREG(GCR_IPRSTC1))&&(0 == xHWREG(GCR_IPRSTC2)), 
-                                                          "xsysctl API error!");
-    }
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
+                "Backup domain write Error");
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
+                "Backup domain write Error");
+    }  
+#endif
 }
 
-//*****************************************************************************
-//
-//! \brief xsysctl 001 test of Peripheral Enable test .
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xsysctl_xSysCtlPeripheralEnable2_test(void)
-{
-    unsigned long ulTemp,ulRegVal,i;
-
-
-    for(i = 0; i < 16; i++)
-    {
-        xSysCtlPeripheralDisable2(ulPeriprerAddr[i]);
-        ulRegVal = xHWREG(SYSCLK_APBCLK);
-        TestAssert((ulxPeriphEnableMask[i] == (ulRegVal & ulxPeriphEnableMask[i])),
-                                                          "xsysctl API error!");  
-    }
-
-	
-    xSysCtlPeripheralEnable2(GPIO_PORTA_BASE);
-    ulTemp = xHWREG(SYSCLK_APBCLK);
-    TestAssert((ulTemp == (xHWREG(SYSCLK_APBCLK))), "xsysctl API error!");
-	
-    xSysCtlPeripheralEnable2(PWMA_BASE);
-    ulRegVal = xHWREG(SYSCLK_APBCLK);
-    TestAssert((SYSCLK_APBCLK_PWM01_EN == (ulRegVal & SYSCLK_APBCLK_PWM01_EN)),
-                                                          "xsysctl API error!");
-	
-    xSysCtlPeripheralEnable2(PWMB_BASE);
-    ulRegVal = xHWREG(SYSCLK_APBCLK);
-    TestAssert((SYSCLK_APBCLK_PWM23_EN == (ulRegVal & SYSCLK_APBCLK_PWM23_EN)),
-                                                          "xsysctl API error!");
-}
 
 //*****************************************************************************
 //
@@ -237,9 +188,7 @@ static void xsysctl_xSysCtlPeripheralEnable2_test(void)
 //*****************************************************************************
 static void xSysctl005Execute(void)
 {
-    xsysctl_xSysCtlPeripheralEnable2_test();
-    xsysctl_xSysCtlPeripheralDisable2_test();   
-    xsysctl_xSysCtlPeripheralReset2_test();
+    xsysctl_SysCtlBackupDomainReset_test();
 }
 
 //

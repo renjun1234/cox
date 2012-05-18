@@ -92,10 +92,8 @@ static void xSysctl004Setup(void)
 //
 //*****************************************************************************
 static void xSysctl004TearDown(void)
-{   
-    volatile int i = 0;
-    while(i++ < 200);
-    
+{  
+    SysCtlDelay(200);
     //xSysCtlPeripheralEnable(SYSCTL_PERIPH_FLITF);
     //xSysCtlPeripheralEnable(SYSCTL_PERIPH_SRAM);
     xSysCtlPeripheralEnable(xSYSCTL_PERIPH_GPIOA);
@@ -130,14 +128,13 @@ static void xsysctl_SysCtlClockGet_test(void)
 {     
     unsigned long ulSize = sizeof(ulSysClockPara)/sizeof(ulSysClockPara[0]);
     unsigned long i = 0;
-    volatile int viDelayCounter = 0;
     
     
     //
     // Wait for UART Send Data over , otherwise terimal will receive messy code
     //
-    while(viDelayCounter++ < 20000);
-    
+    SysCtlDelay(20000);
+
     for(i = 0; i < ulSize; i++) 
     {
         //
@@ -177,6 +174,8 @@ static void xsysctl_SysCtlClockGet_test(void)
 
         TestAssert((ulSysClockPara[i] == SysCtlHClockGet()),
                 "xSysCtl API SysCtlHClockGet Error");
+        TestAssert((ulSysClockPara[i] == xSysCtlClockGet()),
+                "xSysCtl API xSysCtlClockGet Error");
         TestAssert(((ulSysClockPara[i]/2) == SysCtlAPB1ClockGet()),
                 "xSysCtl API SysCtlAPB1ClockGet Error");
         TestAssert((ulSysClockPara[i] == SysCtlAPB2ClockGet()),

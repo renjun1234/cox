@@ -238,8 +238,12 @@ unsigned long ulSysCtlIntPara[] =
     //SYSCTL_INT_PLL2
     //SYSCTL_INT_PLL3
 };
-#else 
 
+#ifndef STM32F10X_MD
+#define STM32F10X_MD
+#endif
+
+#else // else mcu
 #error Please select your mcu first,thank you 
 
 #endif

@@ -121,8 +121,31 @@ static const unsigned long g_pulCLKSELRegs[] =
 };
 
 static volatile const unsigned char g_APBAHBPrescTable[16] = 
-       {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};
-static volatile const unsigned char g_ADCPrescTable[4] = {2, 4, 6, 8};
+{
+    0,
+    0,
+    0,
+    0,
+    1,
+    2,
+    3,
+    4,
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+};
+static volatile const unsigned char g_ADCPrescTable[4] =
+{
+    2,
+    4,
+    6,
+    8,
+};
 
 static const unsigned char g_AHBPrescTable[9] = 
 {
@@ -256,51 +279,52 @@ SysCtlDelay(unsigned long ulCount)
 static xtBoolean
 SysCtlPeripheralValid(unsigned long ulPeripheral)
 {
-    return((ulPeripheral == SYSCTL_PERIPH_ETHMAC) ||
+    return(
+           (ulPeripheral == SYSCTL_PERIPH_ETHMAC) ||
            (ulPeripheral == SYSCTL_PERIPH_USBOTG) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM11) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM10) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM9) ||
-           (ulPeripheral == SYSCTL_PERIPH_ADC3) ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM11)  ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM10)  ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM9)   ||
+           (ulPeripheral == SYSCTL_PERIPH_ADC3)   ||
            (ulPeripheral == SYSCTL_PERIPH_USART1) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM8) ||
-           (ulPeripheral == SYSCTL_PERIPH_SPI1) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM1) ||
-           (ulPeripheral == SYSCTL_PERIPH_ADC2) ||
-           (ulPeripheral == SYSCTL_PERIPH_ADC1) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPG) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPF) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPE) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPD) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPC) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPB) ||
-           (ulPeripheral == SYSCTL_PERIPH_IOPA) ||
-           (ulPeripheral == SYSCTL_PERIPH_AFIO) ||
-           (ulPeripheral == SYSCTL_PERIPH_DAC) ||
-           (ulPeripheral == SYSCTL_PERIPH_PWR) ||
-           (ulPeripheral == SYSCTL_PERIPH_BKP) ||
-           (ulPeripheral == SYSCTL_PERIPH_CAN2) ||
-           (ulPeripheral == SYSCTL_PERIPH_CAN1) ||
-           (ulPeripheral == SYSCTL_PERIPH_USB) ||
-           (ulPeripheral == SYSCTL_PERIPH_I2C2) ||
-           (ulPeripheral == SYSCTL_PERIPH_I2C1) ||
-           (ulPeripheral == SYSCTL_PERIPH_UART5) ||
-           (ulPeripheral == SYSCTL_PERIPH_UART4) ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM8)   ||
+           (ulPeripheral == SYSCTL_PERIPH_SPI1)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM1)   ||
+           (ulPeripheral == SYSCTL_PERIPH_ADC2)   ||
+           (ulPeripheral == SYSCTL_PERIPH_ADC1)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPG)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPF)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPE)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPD)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPC)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPB)   ||
+           (ulPeripheral == SYSCTL_PERIPH_IOPA)   ||
+           (ulPeripheral == SYSCTL_PERIPH_AFIO)   ||
+           (ulPeripheral == SYSCTL_PERIPH_DAC)    ||
+           (ulPeripheral == SYSCTL_PERIPH_PWR)    ||
+           (ulPeripheral == SYSCTL_PERIPH_BKP)    ||
+           (ulPeripheral == SYSCTL_PERIPH_CAN2)   ||
+           (ulPeripheral == SYSCTL_PERIPH_CAN1)   ||
+           (ulPeripheral == SYSCTL_PERIPH_USB)    ||
+           (ulPeripheral == SYSCTL_PERIPH_I2C2)   ||
+           (ulPeripheral == SYSCTL_PERIPH_I2C1)   ||
+           (ulPeripheral == SYSCTL_PERIPH_UART5)  ||
+           (ulPeripheral == SYSCTL_PERIPH_UART4)  ||
            (ulPeripheral == SYSCTL_PERIPH_USART3) ||
            (ulPeripheral == SYSCTL_PERIPH_USART2) ||
-           (ulPeripheral == SYSCTL_PERIPH_SPI3) ||
-           (ulPeripheral == SYSCTL_PERIPH_SPI2) ||
-           (ulPeripheral == SYSCTL_PERIPH_WWDG) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM14) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM13) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM12) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM7) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM6) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM5) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM4) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM3) ||
-           (ulPeripheral == SYSCTL_PERIPH_TIM2) ||
-           (ulPeripheral == SYSCTL_PERIPH_ADC1));
+           (ulPeripheral == SYSCTL_PERIPH_SPI3)   ||
+           (ulPeripheral == SYSCTL_PERIPH_SPI2)   ||
+           (ulPeripheral == SYSCTL_PERIPH_WWDG)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM14)  ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM13)  ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM12)  ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM7)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM6)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM5)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM4)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM3)   ||
+           (ulPeripheral == SYSCTL_PERIPH_TIM2)   
+           );
 }
 #endif
 
@@ -375,19 +399,23 @@ SysCtlPeripheralEnable(unsigned long ulPeripheral)
     //
     // Check the arguments.
     //
-    xASSERT(SysCtlPeripheralValid(ulPeripheral) ||
-            (ulPeripheral == SYSCTL_PERIPH_ETHMACRX) ||
-            (ulPeripheral == SYSCTL_PERIPH_ETHMACTX) ||
-            (ulPeripheral == SYSCTL_PERIPH_SDIO) ||
-            (ulPeripheral == SYSCTL_PERIPH_FSMC) ||
-            (ulPeripheral == SYSCTL_PERIPH_CRC) ||
-            (ulPeripheral == SYSCTL_PERIPH_FLITF) ||
-            (ulPeripheral == SYSCTL_PERIPH_SRAM) ||
-            (ulPeripheral == SYSCTL_PERIPH_DMA2) ||
-            (ulPeripheral == SYSCTL_PERIPH_DMA1) ||
-            (ulPeripheral == SYSCTL_PERIPH_RTC)
-            );
+    xASSERT(SysCtlPeripheralValid(ulPeripheral));
 
+    //
+    // Enable Only Peripherals
+    //
+    xASSERT(
+            (ulPeripheral == SYSCTL_PERIPH_ETHMACRX  )||
+            (ulPeripheral == SYSCTL_PERIPH_ETHMACTX  )||
+            (ulPeripheral == SYSCTL_PERIPH_SDIO      )||
+            (ulPeripheral == SYSCTL_PERIPH_FSMC      )||
+            (ulPeripheral == SYSCTL_PERIPH_CRC       )||
+            (ulPeripheral == SYSCTL_PERIPH_FLITF     )||
+            (ulPeripheral == SYSCTL_PERIPH_SRAM      )||
+            (ulPeripheral == SYSCTL_PERIPH_DMA2      )||
+            (ulPeripheral == SYSCTL_PERIPH_DMA1      )||
+            (ulPeripheral == SYSCTL_PERIPH_RTC       )
+            );
     //
     // Enable this peripheral.
     //
@@ -614,8 +642,7 @@ xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase)
 //! many of which are grouped into sets where only one can be chosen.
 //!
 //! The external crystal frequency is chosen with one of the following values:
-//! \ref SYSCTL_XTAL_4MHZ, \ref SYSCTL_XTAL_5MHZ, \ref SYSCTL_XTAL_6MHZ,
-//! \ref SYSCTL_XTAL_16MHZ.
+//! SYSCTL_XTAL_xMHZ (x=4,5,6...16)
 //!
 //! The oscillator source is chosen with one of the following values:
 //! \ref SYSCTL_OSC_MAIN, \ref SYSCTL_OSC_INT.

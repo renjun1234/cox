@@ -98,7 +98,6 @@ static void xSysctl011Setup(void)
 //*****************************************************************************
 static void xSysctl012Setup(void)
 {
-    volatile long int i = 0;
     //
     // Reset HSI Clock Param
     //
@@ -126,7 +125,7 @@ static void xSysctl012Setup(void)
     xHWREG(PWR_CR)   |=  PWR_CR_DBP;
     
     xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
-    while(i++ < 5);
+    SysCtlDelay(5);
     xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
     
     xHWREG(RCC_BDCR) &= ~RCC_BDCR_LSEON;
@@ -167,7 +166,6 @@ static void xSysctl011TearDown(void)
 //*****************************************************************************
 static void xSysctl012TearDown(void)
 {   
-    volatile unsigned long i = 0;
     
     //
     // Reset HSI Clock Param
@@ -192,7 +190,7 @@ static void xSysctl012TearDown(void)
     xHWREG(PWR_CR)   |=  PWR_CR_DBP;
     
     xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
-    while(i++ < 5);
+    SysCtlDelay(5);
     xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
     
     xHWREG(RCC_BDCR) &= ~RCC_BDCR_LSEON;
