@@ -1707,9 +1707,6 @@
       <file>
         <name>$PROJ_DIR$\..\src\testcase.h</name>
       </file>
-      <file>
-        <name>$PROJ_DIR$\..\src\Xsysctltest05.c</name>
-      </file>
     </group>
     <group>
       <name>testframe</name>

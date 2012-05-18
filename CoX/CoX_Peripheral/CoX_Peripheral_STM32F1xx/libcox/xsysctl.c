@@ -931,11 +931,12 @@ SysCtlIntEnable(unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    xASSERT(((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI) || 
-            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI) ||
-            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL) ||
+    xASSERT(
+            ((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI)   || 
+            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI)   ||
+            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL)   ||
             ((ulIntFlags & SYSCTL_INT_PLL2) == SYSCTL_INT_PLL2) ||
             ((ulIntFlags & SYSCTL_INT_PLL3) == SYSCTL_INT_PLL3)
            );
@@ -969,11 +970,12 @@ SysCtlIntDisable(unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    xASSERT(((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI) || 
-            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI) ||
-            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL) ||
+    xASSERT(
+            ((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI)   || 
+            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI)   ||
+            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL)   ||
             ((ulIntFlags & SYSCTL_INT_PLL2) == SYSCTL_INT_PLL2) ||
             ((ulIntFlags & SYSCTL_INT_PLL3) == SYSCTL_INT_PLL3)
            );
@@ -1005,13 +1007,14 @@ SysCtlIntFlagClear(unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    xASSERT(((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI) || 
-            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE) ||
-            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI) ||
-            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL) ||
+    xASSERT(
+            ((ulIntFlags & SYSCTL_INT_LSI) == SYSCTL_INT_LSI)   || 
+            ((ulIntFlags & SYSCTL_INT_LSE) == SYSCTL_INT_LSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSE) == SYSCTL_INT_HSE)   ||
+            ((ulIntFlags & SYSCTL_INT_HSI) == SYSCTL_INT_HSI)   ||
+            ((ulIntFlags & SYSCTL_INT_PLL) == SYSCTL_INT_PLL)   ||
             ((ulIntFlags & SYSCTL_INT_PLL2) == SYSCTL_INT_PLL2) ||
-            ((ulIntFlags & SYSCTL_INT_CSS) == SYSCTL_INT_CSS) ||
+            ((ulIntFlags & SYSCTL_INT_CSS) == SYSCTL_INT_CSS)   ||
             ((ulIntFlags & SYSCTL_INT_PLL3) == SYSCTL_INT_PLL3)
            );
     //
@@ -1102,8 +1105,10 @@ SysCtlLSIConfig(unsigned long ulLSIConfig)
     //
     // Check the arguments.
     //
-    xASSERT((ulLSIConfig == SYSCTL_LSI_OSC_DIS) ||
-            (ulLSIConfig == SYSCTL_LSI_OSC_EN));
+    xASSERT(
+            (ulLSIConfig == SYSCTL_LSI_OSC_DIS) ||
+            (ulLSIConfig == SYSCTL_LSI_OSC_EN)
+            );
     
     //
     // Config the system control LSI clock.
@@ -1162,20 +1167,21 @@ SysCtlPeripheralClockSourceSet(unsigned long ulPeripheralSrc)
  //
     // Check the arguments.
     //
-    xASSERT((ulPeripheralSrc==SYSCTL_RTC_LSE)||
-            (ulPeripheralSrc==SYSCTL_RTC_LSI)||
-            (ulPeripheralSrc==SYSCTL_RTC_LSE_128)||
-            (ulPeripheralSrc==SYSCTL_MCO_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_MCO_HSI)||
-            (ulPeripheralSrc==SYSCTL_MCO_HSE)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL_2)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3_2)||
-            (ulPeripheralSrc==SYSCTL_MCO_XT1)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3)||
-            (ulPeripheralSrc==SYSCTL_I2S3_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_I2S3_PLL3)||
-            (ulPeripheralSrc==SYSCTL_I2S2_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_I2S2_PLL3)|||
+    xASSERT(
+            (ulPeripheralSrc==SYSCTL_RTC_LSE)       ||
+            (ulPeripheralSrc==SYSCTL_RTC_LSI)       ||
+            (ulPeripheralSrc==SYSCTL_RTC_LSE_128)   ||
+            (ulPeripheralSrc==SYSCTL_MCO_SYSCLK)    ||
+            (ulPeripheralSrc==SYSCTL_MCO_HSI)       ||
+            (ulPeripheralSrc==SYSCTL_MCO_HSE)       ||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL_2)     ||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL3_2)    ||
+            (ulPeripheralSrc==SYSCTL_MCO_XT1)       ||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL3)      ||
+            (ulPeripheralSrc==SYSCTL_I2S3_SYSCLK)   ||
+            (ulPeripheralSrc==SYSCTL_I2S3_PLL3)     ||
+            (ulPeripheralSrc==SYSCTL_I2S2_SYSCLK)   ||
+            (ulPeripheralSrc==SYSCTL_I2S2_PLL3)     ||
             (ulPeripheralSrc==SYSCTL_MCO_PLL2)         
            );
     if(SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc) == 1)
@@ -1478,6 +1484,9 @@ SysCtlAPB2ClockGet(void)
     return ulAPB2Clock;
 }
 
+
+
+
 //*****************************************************************************
 //
 //! \brief Enables access to the RTC and backup registers.
@@ -1514,6 +1523,314 @@ SysCtlBackupAccessDisable(void)
 
 //*****************************************************************************
 //
+//! \brief Read Backup domain register 
+//!
+//! \param ulRegisterID which backup register you want to read.
+//!
+//!  The ulRegisterID can be one of follow value: BKP_DRx (x=1,2,3...42)
+//!  
+//! \return the content of the selected register 
+//
+//*****************************************************************************
+unsigned long
+SysCtlBackupDataRead(unsigned long ulRegisterID)
+{
+    xASSERT(
+            //
+            // medium-density and low-density devices
+            // 
+            (ulRegisterID == BKP_DR1 )||
+            (ulRegisterID == BKP_DR2 )||
+            (ulRegisterID == BKP_DR3 )||
+            (ulRegisterID == BKP_DR4 )||
+            (ulRegisterID == BKP_DR5 )||
+            (ulRegisterID == BKP_DR6 )||
+            (ulRegisterID == BKP_DR7 )||
+            (ulRegisterID == BKP_DR8 )||
+            (ulRegisterID == BKP_DR9 )||
+            (ulRegisterID == BKP_DR10)||       
+            //
+            // high-density, XL-density and connectivity line devices
+            //
+            (ulRegisterID == BKP_DR11)||
+            (ulRegisterID == BKP_DR12)||
+            (ulRegisterID == BKP_DR13)||
+            (ulRegisterID == BKP_DR14)||
+            (ulRegisterID == BKP_DR15)||
+            (ulRegisterID == BKP_DR16)||
+            (ulRegisterID == BKP_DR17)||
+            (ulRegisterID == BKP_DR18)||
+            (ulRegisterID == BKP_DR19)||
+            (ulRegisterID == BKP_DR20)||
+            (ulRegisterID == BKP_DR21)||
+            (ulRegisterID == BKP_DR22)||
+            (ulRegisterID == BKP_DR23)||
+            (ulRegisterID == BKP_DR24)||
+            (ulRegisterID == BKP_DR25)||
+            (ulRegisterID == BKP_DR26)||
+            (ulRegisterID == BKP_DR27)||
+            (ulRegisterID == BKP_DR28)||
+            (ulRegisterID == BKP_DR29)||
+            (ulRegisterID == BKP_DR30)||
+            (ulRegisterID == BKP_DR31)||
+            (ulRegisterID == BKP_DR32)||
+            (ulRegisterID == BKP_DR33)||
+            (ulRegisterID == BKP_DR34)||
+            (ulRegisterID == BKP_DR35)||
+            (ulRegisterID == BKP_DR36)||
+            (ulRegisterID == BKP_DR37)||
+            (ulRegisterID == BKP_DR38)||
+            (ulRegisterID == BKP_DR39)||
+            (ulRegisterID == BKP_DR40)||
+            (ulRegisterID == BKP_DR41)||
+            (ulRegisterID == BKP_DR42)||
+            );
+    return xHWREG(ulRegisterID);
+}
+
+//*****************************************************************************
+//
+//! \brief Write Backup domain register 
+//!
+//! \param ulRegisterID which backup register you want to write.
+//!
+//!  The ulRegisterID can be one of follow value: BKP_DRx (x=1,2,3...42)
+//! \param ulValue half word data, the data that you want to write into 
+//!  
+//! \return None 
+//
+//*****************************************************************************
+void
+SysCtlBackupDataWrite(unsigned long ulRegisterID,unsigned long ulValue)
+{
+    xASSERT(
+            //
+            // medium-density and low-density devices
+            // 
+            (ulRegisterID == BKP_DR1 )||
+            (ulRegisterID == BKP_DR2 )||
+            (ulRegisterID == BKP_DR3 )||
+            (ulRegisterID == BKP_DR4 )||
+            (ulRegisterID == BKP_DR5 )||
+            (ulRegisterID == BKP_DR6 )||
+            (ulRegisterID == BKP_DR7 )||
+            (ulRegisterID == BKP_DR8 )||
+            (ulRegisterID == BKP_DR9 )||
+            (ulRegisterID == BKP_DR10)||       
+            //
+            // high-density, XL-density and connectivity line devices
+            //
+            (ulRegisterID == BKP_DR11)||
+            (ulRegisterID == BKP_DR12)||
+            (ulRegisterID == BKP_DR13)||
+            (ulRegisterID == BKP_DR14)||
+            (ulRegisterID == BKP_DR15)||
+            (ulRegisterID == BKP_DR16)||
+            (ulRegisterID == BKP_DR17)||
+            (ulRegisterID == BKP_DR18)||
+            (ulRegisterID == BKP_DR19)||
+            (ulRegisterID == BKP_DR20)||
+            (ulRegisterID == BKP_DR21)||
+            (ulRegisterID == BKP_DR22)||
+            (ulRegisterID == BKP_DR23)||
+            (ulRegisterID == BKP_DR24)||
+            (ulRegisterID == BKP_DR25)||
+            (ulRegisterID == BKP_DR26)||
+            (ulRegisterID == BKP_DR27)||
+            (ulRegisterID == BKP_DR28)||
+            (ulRegisterID == BKP_DR29)||
+            (ulRegisterID == BKP_DR30)||
+            (ulRegisterID == BKP_DR31)||
+            (ulRegisterID == BKP_DR32)||
+            (ulRegisterID == BKP_DR33)||
+            (ulRegisterID == BKP_DR34)||
+            (ulRegisterID == BKP_DR35)||
+            (ulRegisterID == BKP_DR36)||
+            (ulRegisterID == BKP_DR37)||
+            (ulRegisterID == BKP_DR38)||
+            (ulRegisterID == BKP_DR39)||
+            (ulRegisterID == BKP_DR40)||
+            (ulRegisterID == BKP_DR41)||
+            (ulRegisterID == BKP_DR42)||
+            );
+     xHWREG(ulRegisterID) = (ulValue & 0x0000FFFF);
+}
+
+
+
+//*****************************************************************************
+//
+//! \brief configures the tamper pin active level 
+//!
+//! \param ulLevelMode specifies the volatge level for active tamper pin 
+//!
+//! the tamper active level is chosen with one of the following values:
+//! \ref BKP_CR_TPAL_LOW, \ref BKP_CR_TPAL_HIGH.
+//!
+//! the function is used to configures the threshold detected by the 
+//! power voltage detector(pvd).
+//!
+//! \return none 
+//
+//*****************************************************************************
+void SysCtlTamperPinActiveLevelConfig(unsigned long ulLevelMode)
+{
+    xASSERT(
+            (ulLevelMode == BKP_CR_TPAL_HIGH)||
+            (ulLevelMode == BKP_CR_TPAL_LOW )
+            );
+    if (ulLevelMode == BKP_CR_TPAL_LOW)
+    {
+       xHWREG(BKP_CR) |= BKP_CR_TPAL;
+    }
+    else
+    {
+       xHWREG(BKP_CR) &= ~BKP_CR_TPAL;
+    }
+}
+
+
+//*****************************************************************************
+//
+//! \brief Enable the Tamper Pin functionality.
+//!
+//! \param None.
+//!
+//! The function is used to Enable the Tamper Pin functionality.
+//!
+//! \return None 
+//
+//*****************************************************************************
+
+void SysCtlTamperPinEnable(void)
+{
+    xHWREG(BKP_CR) |= BKP_CR_TPE;
+}
+
+//*****************************************************************************
+//
+//! \brief Disable the Tamper Pin functionality.
+//!
+//! \param None.
+//!
+//! The function is used to Disable the Tamper Pin functionality.
+//!
+//! \return None 
+//
+//*****************************************************************************
+
+void SysCtlTamperPinDisable(void)
+{
+    xHWREG(BKP_CR) &= ~BKP_CR_TPE;
+}
+
+
+//*****************************************************************************
+//
+//! \brief Get the Tamper interrupts flag.
+//!
+//! \param None.  
+//!
+//! Get the Tamper interrupt flag.
+//!
+//! \return the return value is one of the following:
+//! \ref xtrue
+//! \reg xfalse 
+//
+//*****************************************************************************
+unsigned long SysCtlTamperIntFlagGet(void)
+{
+   return (xHWREG(BKP_CSR) & BKP_CSR_TIF); 
+}
+
+
+//*****************************************************************************
+//
+//! \brief Get the Tamper Event flag.
+//!
+//! \param None.  
+//!
+//! Get the Tamper Event flag.
+//!
+//! \return the return value is one of the following:
+//! \ref xtrue
+//! \reg xfalse 
+//
+//*****************************************************************************
+unsigned long SysCtlTamperEventFlagGet(void)
+{
+   return (xHWREG(BKP_CSR) & BKP_CSR_TEF); 
+}
+
+//*****************************************************************************
+//
+//! \brief Enable the Tamper Pin interrupt.
+//!
+//! \param None.
+//!
+//! The function is used to Enable the Tamper Pin interrupt.
+//!
+//! \return None 
+//
+//*****************************************************************************
+void SysCtlTamperIntEnable(void)
+{
+    xHWREG(BKP_CSR) |= BKP_CSR_TPIE; 
+}
+
+
+//*****************************************************************************
+//
+//! \brief Disable the Tamper Pin interrupt.
+//!
+//! \param None.
+//!
+//! The function is used to Disable the Tamper Pin interrupt.
+//!
+//! \return None 
+//
+//*****************************************************************************
+void SysCtlTamperIntDisable(void)
+{
+    xHWREG(BKP_CSR) &= ~BKP_CSR_TPIE; 
+}
+
+//*****************************************************************************
+//
+//! \brief Clear the Tamper Pin interrupt Flag.
+//!
+//! \param None.
+//!
+//! The function is used to Clear the Tamper Pin interrupt Flag.
+//!
+//! \return None 
+//
+//*****************************************************************************
+void SysCtlTamperIntFlagClear(void)
+{
+    xHWREG(BKP_CSR) |= BKP_CSR_CTI; 
+}
+
+
+//*****************************************************************************
+//
+//! \brief Clear the Tamper Pin Event Flag.
+//!
+//! \param None.
+//!
+//! The function is used to Clear the Tamper Pin Event Flag.
+//!
+//! \return None 
+//
+//*****************************************************************************
+void SysCtlTamperEventFlagClear(void)
+{
+    xHWREG(BKP_CSR) |= BKP_CSR_CTE; 
+}
+
+
+//*****************************************************************************
+//
 //! \brief Configures the voltage threshold detected by the Power Voltage 
 //! Detector(PVD).
 //!
@@ -1539,6 +1856,17 @@ SysCtlBackupAccessDisable(void)
 void
 SysCtlPVDLevelConfig(unsigned long ulConfig)
 {
+    xASSERT(
+            (ulConfig == SYSCTL_PVDLEVEL_2V2)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V3)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V4)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V5)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V6)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V7)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V8)||
+            (ulConfig == SYSCTL_PVDLEVEL_2V9)
+            );
+
     xHWREG(PWR_CR) &= ~(PWR_CR_PVDE | PWR_CR_PLS_M);
     xHWREG(PWR_CR) |= ulConfig;
 }

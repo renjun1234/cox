@@ -1626,6 +1626,16 @@
 #define BKP_CR_TPAL             0x00000002
 
 //
+//! TAMPER pin active level high
+//
+#define BKP_CR_TPAL_HIGH        0x00000000
+
+//
+//! TAMPER pin active level low 
+//
+#define BKP_CR_TPAL_LOW         0x00000002
+
+//
 //! TAMPER pin enable
 //
 #define BKP_CR_TPE              0x00000001
@@ -1652,7 +1662,7 @@
 //
 //! Tamper event flag
 //
-#define BKP_CSR_TPE             0x00000100
+#define BKP_CSR_TEF             0x00000100
 
 //
 //! TAMPER pin interrupt enable
