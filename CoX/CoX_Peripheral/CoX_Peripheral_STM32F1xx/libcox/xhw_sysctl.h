@@ -1596,6 +1596,12 @@
 //
 #define BKP_RTCCR_CCO           0x00000080
 
+
+//
+//! Tamper pin output signal select mask
+//
+#define BKP_RTCCR_MASK          0x0000FC7F
+
 //
 //! Calibration value mask
 //
@@ -1605,6 +1611,9 @@
 //! Calibration value shift
 //
 #define BKP_RTCCR_CAL_S         0
+
+
+
 
 //*****************************************************************************
 //

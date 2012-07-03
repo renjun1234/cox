@@ -29,8 +29,8 @@ const tTestCase * const* g_psPatterns[] =  {
     //psPatternXsysctl02,
     //psPatternXsysctl03,
     //psPatternXsysctl04,
-    psPatternXsysctl05,
-    //psPatternXsysctl06,
+    //psPatternXsysctl05,
+    psPatternXsysctl06,
     //
     // end
     //

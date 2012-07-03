@@ -1702,10 +1702,16 @@
     <group>
       <name>testcase</name>
       <file>
+        <name>$PROJ_DIR$\..\src\stm32f10xx_reg.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\src\testcase.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\src\testcase.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\Xsysctltest06.c</name>
       </file>
     </group>
     <group>

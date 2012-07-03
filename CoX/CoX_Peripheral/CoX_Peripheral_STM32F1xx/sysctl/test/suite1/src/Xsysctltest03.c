@@ -37,7 +37,7 @@
 #include "xhw_memmap.h"
 
 #define STM32F103VB
-#include "STM32F1XX_TEST.h"
+#include "stm32f10xx_reg.h"
 //*****************************************************************************
 //
 //!\page test_xsysctl_register test_xsysctl_register

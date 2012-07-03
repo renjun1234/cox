@@ -36,7 +36,7 @@
 
 #define  STM32F103VB  //select special mcu  for test
 #include "test.h"
-#include "STM32F1XX_TEST.h"
+#include "stm32f10xx_reg.h"
 #include "xhw_memmap.h"
 
 //*****************************************************************************

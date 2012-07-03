@@ -174,6 +174,14 @@ tPeripheralTable;
 
 //*****************************************************************************
 //
+// An array is RCC Callback function point
+//
+//*****************************************************************************
+static xtEventCallback g_pfnRCCHandlerCallbacks[1]={0};
+
+
+//*****************************************************************************
+//
 // An array that maps the peripheral base and peripheral ID and interrupt number
 // together to enablea peripheral or peripheral interrupt by a peripheral base.
 //
@@ -218,6 +226,51 @@ static const tPeripheralTable g_pPeripherals[] =
     {USART5_BASE,      xSYSCTL_PERIPH_UART5,   xINT_UART5},
     {WWDG_BASE,        xSYSCTL_PERIPH_WDOG,    xINT_WDT},
 };
+
+//*****************************************************************************
+//
+//! \brief RCC global IRQ, declared in start up code. 
+//!
+//! \param None.
+//!
+//! This function is to give a RCC global IRQ service.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void 
+RCCIntHandler(void)
+{
+    unsigned long ulStatus;
+
+    //
+    // Clear the RCC INT Flag
+    //
+    ulStatus = xHWREG(RCC_CIR);
+
+    if (g_pfnRCCHandlerCallbacks[0] != 0)
+    {
+        g_pfnRCCHandlerCallbacks[0](0, 0, ulStatus, 0);
+    }
+}
+
+//*****************************************************************************
+//
+//! \brief Init interrupts callback for the RCC.
+//!
+//! \param xtPortCallback is callback for the RCC.
+//!
+//! This function is to init interrupts callback for RCC.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void 
+RCCIntCallbackInit(xtEventCallback pfnCallback)
+{
+    g_pfnRCCHandlerCallbacks[0] = pfnCallback;
+}
+
 
 //*****************************************************************************
 //
@@ -399,23 +452,19 @@ SysCtlPeripheralEnable(unsigned long ulPeripheral)
     //
     // Check the arguments.
     //
-    xASSERT(SysCtlPeripheralValid(ulPeripheral));
-
-    //
-    // Enable Only Peripherals
-    //
-    xASSERT(
-            (ulPeripheral == SYSCTL_PERIPH_ETHMACRX  )||
-            (ulPeripheral == SYSCTL_PERIPH_ETHMACTX  )||
-            (ulPeripheral == SYSCTL_PERIPH_SDIO      )||
-            (ulPeripheral == SYSCTL_PERIPH_FSMC      )||
-            (ulPeripheral == SYSCTL_PERIPH_CRC       )||
-            (ulPeripheral == SYSCTL_PERIPH_FLITF     )||
-            (ulPeripheral == SYSCTL_PERIPH_SRAM      )||
-            (ulPeripheral == SYSCTL_PERIPH_DMA2      )||
-            (ulPeripheral == SYSCTL_PERIPH_DMA1      )||
-            (ulPeripheral == SYSCTL_PERIPH_RTC       )
+    xASSERT(SysCtlPeripheralValid(ulPeripheral) ||
+            (ulPeripheral == SYSCTL_PERIPH_ETHMACRX) ||
+            (ulPeripheral == SYSCTL_PERIPH_ETHMACTX) ||
+            (ulPeripheral == SYSCTL_PERIPH_SDIO) ||
+            (ulPeripheral == SYSCTL_PERIPH_FSMC) ||
+            (ulPeripheral == SYSCTL_PERIPH_CRC) ||
+            (ulPeripheral == SYSCTL_PERIPH_FLITF) ||
+            (ulPeripheral == SYSCTL_PERIPH_SRAM) ||
+            (ulPeripheral == SYSCTL_PERIPH_DMA2) ||
+            (ulPeripheral == SYSCTL_PERIPH_DMA1) ||
+            (ulPeripheral == SYSCTL_PERIPH_RTC)
             );
+
     //
     // Enable this peripheral.
     //
@@ -704,7 +753,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     //
     xHWREG(RCC_CIR) &= 0x00FF0000;
 
-    //xHWREG(RCC_CIR) |= 0x00001800;
+    xHWREG(RCC_CIR) |= 0x00001800;
 
     //
     // 
@@ -1162,42 +1211,68 @@ SysCtlLSEConfig(unsigned long ulLSEConfig)
 //
 //*****************************************************************************
 void
-SysCtlPeripheralClockSourceSet(unsigned long ulPeripheralSrc)
+SysCtlPeripheralClockSourceSet(unsigned long ulPeripheralSrc, unsigned long ulDivide)
 {
- //
-    // Check the arguments.
+    unsigned long ulTemp = 0;
     //
-    xASSERT(
-            (ulPeripheralSrc==SYSCTL_RTC_LSE)       ||
-            (ulPeripheralSrc==SYSCTL_RTC_LSI)       ||
-            (ulPeripheralSrc==SYSCTL_RTC_LSE_128)   ||
-            (ulPeripheralSrc==SYSCTL_MCO_SYSCLK)    ||
-            (ulPeripheralSrc==SYSCTL_MCO_HSI)       ||
-            (ulPeripheralSrc==SYSCTL_MCO_HSE)       ||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL_2)     ||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3_2)    ||
-            (ulPeripheralSrc==SYSCTL_MCO_XT1)       ||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3)      ||
-            (ulPeripheralSrc==SYSCTL_I2S3_SYSCLK)   ||
-            (ulPeripheralSrc==SYSCTL_I2S3_PLL3)     ||
-            (ulPeripheralSrc==SYSCTL_I2S2_SYSCLK)   ||
-            (ulPeripheralSrc==SYSCTL_I2S2_PLL3)     ||
+    // Check the arguments. 
+    //
+    xASSERT((ulPeripheralSrc==SYSCTL_RTC_LSE)||
+            (ulPeripheralSrc==SYSCTL_RTC_LSI)||
+            (ulPeripheralSrc==SYSCTL_RTC_LSE_128)||
+            (ulPeripheralSrc==SYSCTL_MCO_SYSCLK)||
+            (ulPeripheralSrc==SYSCTL_MCO_HSI)||
+            (ulPeripheralSrc==SYSCTL_MCO_HSE)||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL_2)||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL3_2)||
+            (ulPeripheralSrc==SYSCTL_MCO_XT1)||
+            (ulPeripheralSrc==SYSCTL_MCO_PLL3)||
+            (ulPeripheralSrc==SYSCTL_ADC_HCLK)||
+            (ulPeripheralSrc==SYSCTL_IWDG_LSI)||
+            (ulPeripheralSrc==SYSCTL_I2S3_SYSCLK)||
+            (ulPeripheralSrc==SYSCTL_I2S3_PLL3)||
+            (ulPeripheralSrc==SYSCTL_I2S2_SYSCLK)||
+            (ulPeripheralSrc==SYSCTL_I2S2_PLL3)||
             (ulPeripheralSrc==SYSCTL_MCO_PLL2)         
            );
     if(SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc) == 1)
     {
         xHWREG(RCC_BDCR) &= ~(RCC_BDCR_RTCSEL_M);
+        xHWREG(g_pulCLKSELRegs[SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc)]) |=
+        SYSCTL_PERIPH_ENUM_CLK(ulPeripheralSrc);
     }
     else if(SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc) == 0)
     {
         xHWREG(RCC_CFGR) &= ~(RCC_CFGR_MCO_M);
+        xHWREG(g_pulCLKSELRegs[SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc)]) |=
+        SYSCTL_PERIPH_ENUM_CLK(ulPeripheralSrc);
     }
     else if(SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc) == 2)
     {
         xHWREG(RCC_CFGR2) &= ~(SYSCTL_PERIPH_ENUM_CLK(ulPeripheralSrc | 1));
-    }
-    xHWREG(g_pulCLKSELRegs[SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc)]) |=
+        xHWREG(g_pulCLKSELRegs[SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc)]) |=
         SYSCTL_PERIPH_ENUM_CLK(ulPeripheralSrc);
+    }
+    else if(ulPeripheralSrc==SYSCTL_IWDG_LSI)
+    {
+        xHWREG(RCC_CSR) |= RCC_CSR_LSION;
+    }
+    else if(ulPeripheralSrc==SYSCTL_ADC_HCLK)
+    {
+        for(ulTemp=0; ulTemp<8; ulTemp++)
+        {
+            if(ulDivide == (1 << ulTemp))
+                break;
+        }
+        xHWREG(RCC_CFGR) &= ~RCC_CFGR_ADCPRE_M;
+        xHWREG(RCC_CFGR) |= (ulTemp << RCC_CFGR_ADCPRE_S);
+    }
+    else
+    {
+        xHWREG(g_pulCLKSELRegs[SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc)]) |=
+        SYSCTL_PERIPH_ENUM_CLK(ulPeripheralSrc);
+    }
+
 }
 
 //*****************************************************************************
@@ -1654,6 +1729,57 @@ SysCtlBackupDataWrite(unsigned long ulRegisterID,unsigned long ulValue)
             (ulRegisterID == BKP_DR42)||
             );
      xHWREG(ulRegisterID) = (ulValue & 0x0000FFFF);
+}
+
+
+//*****************************************************************************
+//
+//! \brief configures the tamper pin active level 
+//!
+//! \param select the signal output on the tamper pin
+//!  value can be one of the following values:
+//! \ref SYSCTL_RTC_NONE, \ref SYSCTL_RTC_SECOND,
+//! \ref SYSCTL_RTC_ALARM, \ref SYSCTL_RTC_CALIBCLOCK,
+//! 
+//!
+//! \return none 
+//
+//*****************************************************************************
+void SysCtlRtcOutPutConfig(unsigned long ulRTCOutputSource)
+{
+    xASSERT(
+            (ulRTCOutputSource == SYSCTL_RTC_NONE      )  ||
+            (ulRTCOutputSource == SYSCTL_RTC_SECOND    )  ||
+            (ulRTCOutputSource == SYSCTL_RTC_ALARM     )  ||
+            (ulRTCOutputSource == SYSCTL_RTC_CALIBCLOCK)  
+           );
+
+    xHWREG(BKP_RTCCR) &= ~BKP_RTCCR_MASK;
+    xHWREG(BKP_RTCCR) |=  ulRTCOutputSource;
+
+}
+
+//*****************************************************************************
+//
+//! \brief Set the rtc calibration value
+//!
+//! \param The value that indicates the numbers of clock pulses that will be 
+//!  ignored every 2^20 clock pulses 
+//! 
+//!
+//! \return none 
+//
+//*****************************************************************************
+void SysCtlSetCalibValue(unsigned long ulValue)
+{
+    xASSERT(
+            (ulValue >= 0x00000000)  &&
+            (ulValue <= 0x0000007F) 
+           );
+
+    xHWREG(BKP_RTCCR) &= ~BKP_RTCCR_CAL_M;
+    xHWREG(BKP_RTCCR) |=  ulValue;
+
 }
 
 
