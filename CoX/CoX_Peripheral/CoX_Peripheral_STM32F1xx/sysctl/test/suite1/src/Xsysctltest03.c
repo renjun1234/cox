@@ -36,7 +36,7 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
-#define STM32F103VB
+#define STM32F10301VB
 #include "stm32f10xx_reg.h"
 //*****************************************************************************
 //
@@ -50,25 +50,25 @@
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl03 register test.
+//! \brief Get the Test description of xsysctl0301 register test.
 //!
-//! \return the desccription of the xsysctl03 test.
+//! \return the desccription of the xsysctl0301 test.
 //
 //*****************************************************************************
-static char* xSysctl03GetTest(void)
+static char* xSysctl0301GetTest(void)
 {
-    return "xsysctl, 03, xsysctl register and api test";
+    return "xsysctl, 0301, SysCtlPeripheralClockSourceSet test";
 }
 
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl03 test.
+//! \brief something should do before the test execute of xsysctl0301 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl03Setup(void)
+static void xSysctl0301Setup(void)
 {
     //
     // Setup PWR BKP Clock Source and Reset Backup Domain
@@ -82,12 +82,12 @@ static void xSysctl03Setup(void)
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl03 test.
+//! \brief Something should do after the test execute of xsysctl0301 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl03TearDown(void)
+static void xSysctl0301TearDown(void)
 {   
     //
     // Reset Backup Domain and Disable PWR BKP Clock source
@@ -103,7 +103,7 @@ static void xSysctl03TearDown(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 03 test of Peripheral Clock Source Set test .
+//! \brief xsysctl 0301 test of Peripheral Clock Source Set test .
 //!
 //! \return None.
 //
@@ -220,12 +220,12 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 03 test execute main body.
+//! \brief xsysctl 0301 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl03Execute(void)
+static void xSysctl0301Execute(void)
 {
     xsysctl_SysCtlPeripheralClockSourceSet_test();
 }
@@ -233,11 +233,11 @@ static void xSysctl03Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl03Register = {
-    xSysctl03GetTest,
-    xSysctl03Setup,
-    xSysctl03TearDown,
-    xSysctl03Execute,
+const tTestCase sTestXSysctl0301Register = {
+    xSysctl0301GetTest,
+    xSysctl0301Setup,
+    xSysctl0301TearDown,
+    xSysctl0301Execute,
     
 };
 
@@ -246,6 +246,7 @@ const tTestCase sTestXSysctl03Register = {
 //
 const tTestCase * const psPatternXsysctl03[] =
 {
-    &sTestXSysctl03Register,
-    0
+    &sTestXSysctl0301Register,
+    0,
 };
+

@@ -36,6 +36,7 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
+#define STM32103VB
 #include "stm32f10xx_reg.h"
 
 
@@ -96,37 +97,38 @@ static const tPeripheralTable g_pPeripherals[] =
     {WWDG_BASE,        xSYSCTL_PERIPH_WDOG,    xINT_WDT},
 };
 
+
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl004 register test.
+//! \brief Get the Test description of xsysctl0601 register test.
 //!
-//! \return the desccription of the xcore004 test.
+//! \return the desccription of the xcore0601 test.
 //
 //*****************************************************************************
-static char* xSysctl006GetTest(void)
+static char* xSysctl0601GetTest(void)
 {
-    return "xsysctl, 006, xSysCtlPeripheraIntNumGet function test";
+    return "xsysctl, 0601, xSysCtlPeripheraIntNumGet function test";
 }
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl006 test.
+//! \brief something should do before the test execute of xsysctl0601 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl006Setup(void)
+static void xSysctl0601Setup(void)
 {
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl001 test.
+//! \brief something should do after the test execute of xsysctl0601 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl006TearDown(void)
+static void xSysctl0601TearDown(void)
 {   
 
 }
@@ -134,12 +136,12 @@ static void xSysctl006TearDown(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 006 test of xSysCtlPeripheraIntNumGet function test
+//! \brief xsysctl 0601 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xsysctl_xSysCtlPeripheraIntNumGet_test(void)
+static void xSysctl0601Execute(void)
 {
     unsigned long ulSize = 0;
     unsigned long i = 0;
@@ -152,35 +154,340 @@ static void xsysctl_xSysCtlPeripheraIntNumGet_test(void)
         TestAssert((ulTmp == g_pPeripherals[i].ulPeripheralIntNum),
                             "xSysCtl Function xSysCtlPeripheraIntNumGet Error");
     }
-
-}
-//*****************************************************************************
-//
-//! \brief xsysctl 006 test execute main body.
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xSysctl006Execute(void)
-{
-    xsysctl_xSysCtlPeripheraIntNumGet_test();
 }
 
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl006Register = {
-    xSysctl006GetTest,
-    xSysctl006Setup,
-    xSysctl006TearDown,
-    xSysctl006Execute,
+const tTestCase sTestXSysctl0601Register = {
+    xSysctl0601GetTest,
+    xSysctl0601Setup,
+    xSysctl0601TearDown,
+    xSysctl0601Execute,
 };
+
+
+
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0602 register test.
+//!
+//! \return the desccription of the xcore0602 test.
+//
+//*****************************************************************************
+static char* xSysctl0602GetTest(void)
+{
+    return "xsysctl, 0602, SysCtlRtcOutPutConfig function test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0602 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0602Setup(void)
+{
+    xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+}
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl0602 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0602TearDown(void)
+{   
+    xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+}
+
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0602 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0602Execute(void)
+{
+    unsigned long OutputSource[4] = 
+    {
+       SYSCTL_RTC_NONE, 
+       SYSCTL_RTC_SECOND,
+       SYSCTL_RTC_ALARM,   
+       SYSCTL_RTC_CALIBCLOCK,
+    };
+    unsigned long ulSize = 0;
+    unsigned long i = 0;
+    unsigned long ulTmp = 0;
+    
+    ulSize = sizeof(OutputSource)/sizeof(OutputSource[0]);
+    for(i = 0; i < ulSize; i++) 
+    {
+        SysCtlRtcOutPutConfig(OutputSource[i]); 
+        ulTmp = xHWREG(BKP_RTCCR);
+        TestAssert((ulTmp == OutputSource[i]),
+                "xSysCtl test 0602: SysCtlRtcOutPutConfig failed");
+    }
+    
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0602Register = {
+    xSysctl0602GetTest,
+    xSysctl0602Setup,
+    xSysctl0602TearDown,
+    xSysctl0602Execute,
+};
+
+
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0603 register test.
+//!
+//! \return the desccription of the xcore0603 test.
+//
+//*****************************************************************************
+static char* xSysctl0603GetTest(void)
+{
+    return "xsysctl, 0603, SysCtlSetCalibValue function test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0603 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0603Setup(void)
+{
+    xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+}
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl0603 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0603TearDown(void)
+{   
+    xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+}
+
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0603 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0603Execute(void)
+{
+    unsigned long ulTestData[4] = 
+    {
+       0x00000000, 
+       0x00000030, 
+       0x0000007F, 
+       0xFFFFFFFF, 
+    };
+    unsigned long ulSize = 0;
+    unsigned long i = 0;
+    unsigned long ulTmp = 0;
+    
+    ulSize = sizeof(ulTestData)/sizeof(ulTestData[0]);
+    for(i = 0; i < ulSize; i++) 
+    {
+        SysCtlSetCalibValue(ulTestData[i]); 
+        ulTmp = xHWREG(BKP_RTCCR);
+        TestAssert(((ulTmp & 0x0000007F) == ulTestData[i]),
+                "xSysCtl test 0603: SysCtlSetCalibValue failed");
+    }
+    
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0603Register = {
+    xSysctl0603GetTest,
+    xSysctl0603Setup,
+    xSysctl0603TearDown,
+    xSysctl0603Execute,
+};
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0604 register test.
+//!
+//! \return the desccription of the xcore0604 test.
+//
+//*****************************************************************************
+static char* xSysctl0604GetTest(void)
+{
+    return "xsysctl, 0604, SysCtlTamperPinActiveLevelConfig function test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0604 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0604Setup(void)
+{
+}
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl0604 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0604TearDown(void)
+{   
+}
+
+//*****************************************************************************
+//
+//! \brief Test SysCtlTamperPinActiveLevelConfig function 
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void SysCtlTamperPinActiveLevelConfigTest(void)
+{
+    unsigned long ulTmp = 0;
+    
+    SysCtlTamperPinActiveLevelConfig(BKP_CR_TPAL_HIGH);
+    ulTmp = xHWREG(BKP_CR);
+    TestAssert(((ulTmp & BKP_CR_TPAL) == 0),
+            "xSysCtl test 0604: SysCtlTamperPinActiveLevelConfig Set High failed");
+
+    SysCtlTamperPinActiveLevelConfig(BKP_CR_TPAL_LOW);
+    ulTmp = xHWREG(BKP_CR);
+    TestAssert(((ulTmp & BKP_CR_TPAL) != 0),
+            "xSysCtl test 0604: SysCtlTamperPinActiveLevelConfig Set Low failed");
+
+}
+
+
+//*****************************************************************************
+//
+//! \brief Test SysCtlTamperPinEnableTest function 
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void SysCtlTamperPinEnableTest(void)
+{
+    unsigned long tmp = 0;
+    SysCtlTamperPinEnable();
+    tmp = xHWREG(BKP_CR) & BKP_CR_TPE;
+    TestAssert((tmp != 0), "xSysCtl test 0604: SysCtlTamperPinEnable failed");
+}
+
+//*****************************************************************************
+//
+//! \brief Test SysCtlTamperPinDisableTest function 
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void SysCtlTamperPinDisableTest(void)
+{
+    unsigned long tmp = 0;
+    SysCtlTamperPinDisable();
+    tmp = xHWREG(BKP_CR) & BKP_CR_TPE;
+    TestAssert((tmp == 0), "xSysCtl test 0604: SysCtlTamperPinDisable failed");
+}
+
+//*****************************************************************************
+//
+//! \brief Test SysCtlTamperIntEnableTest function 
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void SysCtlTamperIntEnableTest(void)
+{
+    unsigned long tmp = 0;
+    SysCtlTamperIntEnable();
+    tmp = xHWREG(BKP_CSR) & BKP_CSR_TPIE;
+    TestAssert((tmp != 0), "xSysCtl test 0604: SysCtlTamperIntEnable failed");
+
+}
+
+//*****************************************************************************
+//
+//! \brief Test SysCtlTamperIntDisableTest function 
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void SysCtlTamperIntDisableTest(void)
+{
+    unsigned long tmp = 0;
+    SysCtlTamperIntDisable();
+    tmp = xHWREG(BKP_CSR) & BKP_CSR_TPIE;
+    TestAssert((tmp == 0), "xSysCtl test 0604: SysCtlTamperIntDisable failed");
+
+}
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0604 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0604Execute(void)
+{
+    SysCtlTamperPinActiveLevelConfigTest();
+    SysCtlTamperPinEnableTest();
+    SysCtlTamperPinDisableTest();
+    SysCtlTamperIntEnableTest();
+    SysCtlTamperIntDisableTest();
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0604Register = {
+    xSysctl0604GetTest,
+    xSysctl0604Setup,
+    xSysctl0604TearDown,
+    xSysctl0604Execute,
+};
+
+
+
 
 //
 // Xsysctl test suits.
 //
 const tTestCase * const psPatternXsysctl06[] =
 {
-    &sTestXSysctl006Register,
+    &sTestXSysctl0601Register,
+    &sTestXSysctl0602Register,
+    &sTestXSysctl0603Register,
+    &sTestXSysctl0604Register,
     0
 };
+

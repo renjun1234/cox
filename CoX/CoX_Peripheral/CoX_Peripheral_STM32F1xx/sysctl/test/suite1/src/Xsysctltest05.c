@@ -95,26 +95,30 @@ unsigned long ulBackupDataAddr[] =
     BKP_DR41,
     BKP_DR42,
 };
+
+
+
+
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl005 register test.
+//! \brief Get the Test description of xsysctl0501 register test.
 //!
-//! \return the desccription of the xcore005 test.
+//! \return the desccription of the xcore0501 test.
 //
 //*****************************************************************************
-static char* xSysctl005GetTest(void)
+static char* xSysctl0501GetTest(void)
 {
-    return "xsysctl, 005, xsysctl register and test";
+    return "xsysctl, 0501, SysCtlBackupDataWrite test";
 }
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl005 test.
+//! \brief something should do before the test execute of xsysctl0501 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl005Setup(void)
+static void xSysctl0501Setup(void)
 {
     unsigned long  i = 0;
 
@@ -124,81 +128,324 @@ static void xSysctl005Setup(void)
 
     for(i = 0; i < 10; i++) 
     {
-        xHWREG(ulBackupDataAddr[i]) = (unsigned long) i;
-        TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
-                "Backup domain write Error");
+        xHWREG(ulBackupDataAddr[i]) = 0;
     }  
 
 #if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
     for(i = 10; i < 42; i++) 
     {
-        xHWREG(ulBackupDataAddr[i]) = (unsigned long) i;
+        xHWREG(ulBackupDataAddr[i]) = 0;
     }  
-    TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
-            "Backup domain write Error");
 #endif
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl005 test.
+//! \brief something should do after the test execute of xsysctl0501 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl005TearDown(void)
+static void xSysctl0501TearDown(void)
 {   
+    unsigned long  i = 0;
 
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = 0;
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = 0;
+    }  
+#endif
 }
 
+
+
 //*****************************************************************************
 //
-//! \brief xsysctl 005 test of Peripheral Disable test .
+//! \brief xsysctl 0501 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xsysctl_SysCtlBackupDomainReset_test(void)
+static void xSysctl0501Execute(void)
 {
     unsigned long  i = 0;
 
-    SysCtlBackupDomainReset();
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
     for(i = 0; i < 10; i++) 
     {
-        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
-                "Backup domain write Error");
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], i);
     }  
 
 #if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
     for(i = 10; i < 42; i++) 
     {
-        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
-                "Backup domain write Error");
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], i);
+    }  
+#endif 
+
+
+    for(i = 0; i < 10; i++) 
+    {
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
+                "Test 0501: SysCtlBackupDataWrite function failed");
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == (unsigned long) i),
+                "Test 0501: SysCtlBackupDataWrite function failed");
     }  
 #endif
-}
-
-
-//*****************************************************************************
-//
-//! \brief xsysctl 005 test execute main body.
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xSysctl005Execute(void)
-{
-    xsysctl_SysCtlBackupDomainReset_test();
 }
 
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl005Register = {
-    xSysctl005GetTest,
-    xSysctl005Setup,
-    xSysctl005TearDown,
-    xSysctl005Execute,
+const tTestCase sTestXSysctl0501Register = {
+    xSysctl0501GetTest,
+    xSysctl0501Setup,
+    xSysctl0501TearDown,
+    xSysctl0501Execute,
+};
+
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0502 register test.
+//!
+//! \return the desccription of the xcore0502 test.
+//
+//*****************************************************************************
+static char* xSysctl0502GetTest(void)
+{
+    return "xsysctl, 0502, SysCtlBackupDataRead test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0502 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0502Setup(void)
+{
+    unsigned long  i = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) =  i;
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) =  i;
+    }  
+#endif
+}
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl0502 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0502TearDown(void)
+{   
+    unsigned long  i = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = 0;
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        xHWREG(ulBackupDataAddr[i]) = 0;
+    }  
+#endif
+}
+
+
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0502 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0502Execute(void)
+{
+    unsigned long  i = 0;
+    unsigned long  tmp = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        tmp = SysCtlBackupDataRead(ulBackupDataAddr[i]); 
+        TestAssert( (tmp == i),
+                "Test 0502: SysCtlBackupDataRead function failed");
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        tmp = SysCtlBackupDataRead(ulBackupDataAddr[i]); 
+        TestAssert( (tmp == i),
+                "Test 0502: SysCtlBackupDataRead function failed");
+    }  
+#endif 
+
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0502Register = {
+    xSysctl0502GetTest,
+    xSysctl0502Setup,
+    xSysctl0502TearDown,
+    xSysctl0502Execute,
+};
+
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0503 register test.
+//!
+//! \return the desccription of the xcore0503 test.
+//
+//*****************************************************************************
+static char* xSysctl0503GetTest(void)
+{
+    return "xsysctl, 0503, SysCtlBackupDomainReset test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0503 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0503Setup(void)
+{
+    unsigned long  i = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], i);
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], i);
+    }  
+#endif
+}
+
+//*****************************************************************************
+//
+//! \brief something should do after the test execute of xsysctl0503 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0503TearDown(void)
+{   
+    unsigned long  i = 0;
+
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+
+    for(i = 0; i < 10; i++) 
+    {
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], 0);
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        SysCtlBackupDataWrite(ulBackupDataAddr[i], 0);
+    }  
+#endif
+}
+
+
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0503 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0503Execute(void)
+{
+    unsigned long  i = 0;
+
+    SysCtlBackupDomainReset();
+
+    for(i = 0; i < 10; i++) 
+    {
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
+                "Backup domain Reset Error");
+    }  
+
+#if (defined(STM32F10X_HD) || defined(STM32F10X_HD_VL) || defined(STM32F10X_XL) || defined(STM32F10X_CL))
+    for(i = 10; i < 42; i++) 
+    {
+        TestAssert((xHWREG(ulBackupDataAddr[i]) == 0),
+                "Backup domain Reset Error");
+    }  
+#endif
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0503Register = {
+    xSysctl0503GetTest,
+    xSysctl0503Setup,
+    xSysctl0503TearDown,
+    xSysctl0503Execute,
 };
 
 //
@@ -206,6 +453,9 @@ const tTestCase sTestXSysctl005Register = {
 //
 const tTestCase * const psPatternXsysctl05[] =
 {
-    &sTestXSysctl005Register,
-    0
+    &sTestXSysctl0501Register,
+    &sTestXSysctl0502Register,
+    &sTestXSysctl0503Register,
+    0,
 };
+

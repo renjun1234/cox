@@ -1978,7 +1978,6 @@ extern void SysCtlResetFlagClear(void);
 
 extern void SysCtlReset(void);
 extern void SysCtlSleep(void);
-extern void SysCtlBackupDomainReset(void);
 
 extern void SysCtlFlagStatusClear(unsigned long ulFlag);
 extern unsigned long SysCtlFlagStatusGet(void);
@@ -1989,9 +1988,23 @@ extern void SysCtlWakeUpPinEnable(void);
 extern void SysCtlPVDLevelConfig(unsigned long ulConfig);
 extern void SysCtlBackupAccessDisable(void);
 extern void SysCtlBackupAccessEnable(void);
-
+extern void SysCtlBackupDomainReset(void);
 extern unsigned long SysCtlBackupDataRead(unsigned long ulRegisterID);
 extern void SysCtlBackupDataWrite(unsigned long ulRegisterID,unsigned long ulValue);
+extern void          SysCtlRtcOutPutConfig(unsigned long ulRTCOutputSource);
+extern void          SysCtlSetCalibValue(unsigned long ulValue);
+extern void          SysCtlTamperPinActiveLevelConfig(unsigned long ulLevelMode);
+extern void          SysCtlTamperPinEnable(void);
+extern void          SysCtlTamperPinDisable(void);
+extern unsigned long SysCtlTamperIntFlagGet(void);
+extern unsigned long SysCtlTamperEventFlagGet(void);
+extern void          SysCtlTamperIntEnable(void);
+extern void          SysCtlTamperIntDisable(void);
+extern void          SysCtlTamperIntFlagClear(void);
+extern void          SysCtlTamperEventFlagClear(void);
+
+
+
 //*****************************************************************************
 //
 //! @}

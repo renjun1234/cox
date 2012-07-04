@@ -6,7 +6,7 @@
 //!
 //! <h2>Description</h2>
 //! This module implements the test sequence for the xsysctl sub component.<br><br>
-//! - \p Board: MCRSTM32 <br><br>
+//! - \p Board: MCBSTM32 <br><br>
 //! - \p Last-Time(about): 0.5s <br><br>
 //! - \p Phenomenon: Success or failure information will be printed on the UART. 
 //!    <br><br>
@@ -36,6 +36,7 @@
 
 #include "test.h"
 #include "xhw_memmap.h"
+
 #define STM32F103VB
 #include "stm32f10xx_reg.h"
 //*****************************************************************************
@@ -51,52 +52,103 @@
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl011 register test.
+//! \brief Get the Test description of xsysctl0101 register test.
 //!
-//! \return the desccription of the xcore011 test.
+//! \return the desccription of the xcore0101 test.
 //
 //*****************************************************************************
-static char* xSysctl011GetTest(void)
+static char* xSysctl0101GetTest(void)
 {
-    return "xsysctl, 011, SysCtl Peripheral Int Enable/Disable test";
+    return "xsysctl, 0101, SysCtl Peripheral Int Enable/Disable test";
 }
 
-
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl012 register test.
-//!
-//! \return the desccription of the xcore012 test.
-//
-//*****************************************************************************
-
-static char* xSysctl012GetTest(void)
-{
-    return "xsysctl, 012, SysCtl Peripheral Int Flag Clear/Get test";
-}
-
-
-//*****************************************************************************
-//
-//! \brief something should do before the test execute of xsysctl011 test.
+//! \brief something should do before the test execute of xsysctl0101 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl011Setup(void)
+static void xSysctl0101Setup(void)
 {
 
 }
 
-
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl012 test.
+//! \brief something should do after the test execute of xsysctl0101 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl012Setup(void)
+static void xSysctl0101TearDown(void)
+{   
+
+}
+
+//*****************************************************************************
+//
+//! \brief xsysctl 0101 test execute main body.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0101Execute(void)
+{
+    unsigned long i = 0;
+    unsigned long ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);
+    unsigned long ulTemp = 0;
+
+    for(i = 0; i < ulSize; i++)
+    {
+        SysCtlIntEnable(ulSysCtlIntPara[i]);
+        ulTemp = xHWREG(RCC_CIR);
+        TestAssert((0 != (ulTemp & (1UL << (8 + i)))), 
+                "xsysctl API SysCtlIntEnable error!");
+    }
+
+    for(i = 0; i < ulSize; i++)
+    {
+        SysCtlIntDisable(ulSysCtlIntPara[i]);
+        ulTemp = xHWREG(RCC_CIR);
+        TestAssert((0 == (ulTemp & (1UL << (8 + i)))), 
+                "xsysctl API SysCtlIntDisable error!");
+    }
+    
+}
+
+//
+// xsysctl register test case struct.
+//
+const tTestCase sTestXSysctl0101Register = {
+    xSysctl0101GetTest,
+    xSysctl0101Setup,
+    xSysctl0101TearDown,
+    xSysctl0101Execute,
+};
+
+
+//*****************************************************************************
+//
+//! \brief Get the Test description of xsysctl0102 register test.
+//!
+//! \return the desccription of the xcore0102 test.
+//
+//*****************************************************************************
+
+static char* xSysctl0102GetTest(void)
+{
+    return "xsysctl, 0102, SysCtl Peripheral Int Flag Clear/Get test";
+}
+
+//*****************************************************************************
+//
+//! \brief something should do before the test execute of xsysctl0102 test.
+//!
+//! \return None.
+//
+//*****************************************************************************
+static void xSysctl0102Setup(void)
 {
     //
     // Reset HSI Clock Param
@@ -143,28 +195,15 @@ static void xSysctl012Setup(void)
     // PLL HSE IS ALREADY SET IN SysCtlClockSet FUNCTION
 }
 
+
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl011 test.
+//! \brief something should do after the test execute of xsysctl0102 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl011TearDown(void)
-{   
-
-}
-
-
-
-//*****************************************************************************
-//
-//! \brief something should do after the test execute of xsysctl012 test.
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xSysctl012TearDown(void)
+static void xSysctl0102TearDown(void)
 {   
     
     //
@@ -202,57 +241,13 @@ static void xSysctl012TearDown(void)
 
 }
 
-//*****************************************************************************
-//
-//! \brief xsysctl 011 test of Enable the system control interrrupts 
-//! \param void
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xsysctl_SysCtlIntEnable_test(void)
-{
-    unsigned long i = 0;
-    unsigned long ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);
-    unsigned long ulTemp = 0;
 
-    for(i = 0; i < ulSize; i++)
-    {
-        SysCtlIntEnable(ulSysCtlIntPara[i]);
-        ulTemp = xHWREG(RCC_CIR);
-        TestAssert((0 != (ulTemp & (1UL << (8 + i)))), 
-                "xsysctl API SysCtlIntEnable error!");
-    }
-}
+
 
 
 //*****************************************************************************
 //
-//! \brief xsysctl 011 test of Disable the system control interrrupts 
-//! \param void
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xsysctl_SysCtlIntDisable_test(void)
-{
-    unsigned long i = 0;
-    unsigned long ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);
-    unsigned long ulTemp = 0;
-
-    for(i = 0; i < ulSize; i++)
-    {
-        SysCtlIntDisable(ulSysCtlIntPara[i]);
-        ulTemp = xHWREG(RCC_CIR);
-        TestAssert((0 == (ulTemp & (1UL << (8 + i)))), 
-                "xsysctl API SysCtlIntDisable error!");
-    }
-}
-
-
-//*****************************************************************************
-//
-//! \brief xsysctl 012 test of Get system control interrrupts Flag
+//! \brief xsysctl 0102 test of Get system control interrrupts Flag
 //! \param void
 //!
 //! \return None.
@@ -297,7 +292,7 @@ static void xsysctl_SysCtlIntFlagGet_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 012 test of Clear system control interrrupts Flag
+//! \brief xsysctl 0102 test of Clear system control interrrupts Flag
 //! \param void
 //!
 //! \return None.
@@ -328,27 +323,16 @@ static void xsysctl_SysCtlIntFlagClear_test(void)
             "xsysctl API SysCtlIntFlagClear error!");
 
 }
-//*****************************************************************************
-//
-//! \brief xsysctl 011 test execute main body.
-//!
-//! \return None.
-//
-//*****************************************************************************
-static void xSysctl011Execute(void)
-{
-    xsysctl_SysCtlIntEnable_test();    
-    xsysctl_SysCtlIntDisable_test();    
-}
+
 
 //*****************************************************************************
 //
-//! \brief xsysctl 012 test execute main body.
+//! \brief xsysctl 0102 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl012Execute(void)
+static void xSysctl0102Execute(void)
 {
     xsysctl_SysCtlIntFlagGet_test();
     xsysctl_SysCtlIntFlagClear_test();
@@ -357,26 +341,22 @@ static void xSysctl012Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl011Register = {
-    xSysctl011GetTest,
-    xSysctl011Setup,
-    xSysctl011TearDown,
-    xSysctl011Execute,
+const tTestCase sTestXSysctl0102Register =
+{
+    xSysctl0102GetTest,
+    xSysctl0102Setup,    
+    xSysctl0102TearDown,
+    xSysctl0102Execute,
 };
 
 
-const tTestCase sTestXSysctl012Register = {
-    xSysctl012GetTest,
-    xSysctl012Setup,    
-    xSysctl012TearDown,
-    xSysctl012Execute,
-};
+
 //
 // Xsysctl test suits.
 //
 const tTestCase * const psPatternXsysctl01[] =
 {
-    &sTestXSysctl011Register,
-    &sTestXSysctl012Register,
-    0
+    &sTestXSysctl0101Register,
+    &sTestXSysctl0102Register,
+    0,
 };

@@ -34,10 +34,11 @@
 //*****************************************************************************
 
 
-#define  STM32F103VB  //select special mcu  for test
 #include "test.h"
-#include "stm32f10xx_reg.h"
 #include "xhw_memmap.h"
+
+#define  STM32F103VB  //select special mcu  for test
+#include "stm32f10xx_reg.h"
 
 //*****************************************************************************
 //
@@ -52,36 +53,36 @@
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl002 register test.
+//! \brief Get the Test description of xsysctl0201 register test.
 //!
-//! \return the desccription of the xsysctl002 test.
+//! \return the desccription of the xsysctl0201 test.
 //
 //*****************************************************************************
-static char* xSysctl002GetTest(void)
+static char* xSysctl0201GetTest(void)
 {
-    return "xsysctl, 002, xsysctl register and api test";
+    return "xsysctl, 0201, SysCtlPeripheralEnable/Disable/Reset test";
 }
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl002 test.
+//! \brief something should do before the test execute of xsysctl0201 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl002Setup(void)
+static void xSysctl0201Setup(void)
 {
 
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl002 test.
+//! \brief something should do after the test execute of xsysctl0201 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl002TearDown(void)
+static void xSysctl0201TearDown(void)
 {   
     xSysCtlPeripheralEnable(SYSCTL_PERIPH_FLITF);
     xSysCtlPeripheralEnable(SYSCTL_PERIPH_SRAM);
@@ -89,7 +90,7 @@ static void xSysctl002TearDown(void)
     xSysCtlPeripheralEnable(SYSCTL_PERIPH_AFIO);
 
     xSPinTypeUART(UART1RX,PA10);
-    xSPinTypeUART(UART1TX,PA9);
+    xSPinTypeUART(UART1TX,PA9 );
     
 
     xSysCtlPeripheralReset(xSYSCTL_PERIPH_UART1);
@@ -107,7 +108,7 @@ static void xSysctl002TearDown(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 002 test of Peripheral Disable test .
+//! \brief xsysctl 0201 test of Peripheral Disable test .
 //!
 //! \return None.
 //
@@ -127,7 +128,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_AHBENR);
         TestAssert((0 == (ulRegVal & ulSYSCTL_AHB_EnableMask[i]) && 
                 ((ulTemp & (~ulSYSCTL_AHB_EnableMask[i]))== ulRegVal)),
-                 "xsysctl API error!");
+                "xsysctl API error!");
         
     }
 
@@ -140,7 +141,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_APB1ENR);
         TestAssert((0 == (ulRegVal & ulSYSCTL_APB1_EnableMask[i]) && 
                 ((ulTemp & (~ulSYSCTL_APB1_EnableMask[i]))== ulRegVal)),
-                 "xsysctl API error!");
+                "xsysctl API error!");
         
     }
 
@@ -152,7 +153,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_APB2ENR);
         TestAssert((0 == (ulRegVal & ulSYSCTL_APB2_EnableMask[i]) && 
                 ((ulTemp & (~ulSYSCTL_APB2_EnableMask[i]))== ulRegVal)),
-                 "xsysctl API error!");
+                "xsysctl API error!");
         
     }
 
@@ -167,7 +168,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_AHBENR);
         TestAssert((0 == (ulRegVal & ulxPERIPHERE_AHB_EnableMask[i]) && 
             ((ulTemp & (~ulxPERIPHERE_AHB_EnableMask[i]))== ulRegVal)),
-                                                    "xsysctl API error!"); 
+                "xsysctl API error!"); 
     }
 
     ulSize = sizeof(ulPERIPHER_APB1_Addr)/sizeof(ulPERIPHER_APB1_Addr[0]);
@@ -178,7 +179,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_APB1ENR);
         TestAssert((0 == (ulRegVal & ulxPERIPHERE_APB1_EnableMask[i]) && 
             ((ulTemp & (~ulxPERIPHERE_APB1_EnableMask[i]))== ulRegVal)),
-                                                    "xsysctl API error!"); 
+                "xsysctl API error!"); 
     }
 
     ulSize = sizeof(ulPERIPHER_APB2_Addr)/sizeof(ulPERIPHER_APB2_Addr[0]);
@@ -189,7 +190,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
         ulRegVal = xHWREG(RCC_APB2ENR);
         TestAssert((0 == (ulRegVal & ulxPERIPHERE_APB2_EnableMask[i]) && 
             ((ulTemp & (~ulxPERIPHERE_APB2_EnableMask[i]))== ulRegVal)),
-                                                    "xsysctl API error!"); 
+                "xsysctl API error!"); 
     }
 
 }
@@ -200,7 +201,7 @@ static void xsysctl_SysCtlPeripheralDisable_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 002 test of Peripheral reset test .
+//! \brief xsysctl 0201 test of Peripheral reset test .
 //!
 //! \return None.
 //
@@ -238,7 +239,7 @@ static void xsysctl_SysCtlPeripheralReset_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 002 test of Peripheral Enable test .
+//! \brief xsysctl 0201 test of Peripheral Enable test .
 //!
 //! \return None.
 //
@@ -320,12 +321,12 @@ static void xsysctl_SysCtlPeripheralEnable_test(void)
 }
 //*****************************************************************************
 //
-//! \brief xsysctl 002 test execute main body.
+//! \brief xsysctl 0201 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl002Execute(void)
+static void xSysctl0201Execute(void)
 {
     SysCtlDelay(100000);
     xsysctl_SysCtlPeripheralEnable_test();
@@ -337,11 +338,11 @@ static void xSysctl002Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl002Register = {
-    xSysctl002GetTest,
-    xSysctl002Setup,
-    xSysctl002TearDown,
-    xSysctl002Execute,
+const tTestCase sTestXSysctl0201Register = {
+    xSysctl0201GetTest,
+    xSysctl0201Setup,
+    xSysctl0201TearDown,
+    xSysctl0201Execute,
 };
 
 //
@@ -349,6 +350,7 @@ const tTestCase sTestXSysctl002Register = {
 //
 const tTestCase * const psPatternXsysctl02[] =
 {
-    &sTestXSysctl002Register,
+    &sTestXSysctl0201Register,
     0
 };
+

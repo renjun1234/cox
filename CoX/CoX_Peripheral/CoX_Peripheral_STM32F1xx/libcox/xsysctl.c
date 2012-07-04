@@ -1772,13 +1772,10 @@ void SysCtlRtcOutPutConfig(unsigned long ulRTCOutputSource)
 //*****************************************************************************
 void SysCtlSetCalibValue(unsigned long ulValue)
 {
-    xASSERT(
-            (ulValue >= 0x00000000)  &&
-            (ulValue <= 0x0000007F) 
-           );
+    xASSERT((ulValue >= 0x00000000) && (ulValue <= 0x0000007F));
 
     xHWREG(BKP_RTCCR) &= ~BKP_RTCCR_CAL_M;
-    xHWREG(BKP_RTCCR) |=  ulValue;
+    xHWREG(BKP_RTCCR) |=  (ulValue & 0x0000007F);
 
 }
 

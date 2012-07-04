@@ -62,36 +62,36 @@ unsigned long ulSysClockPara[] =
 
 //*****************************************************************************
 //
-//! \brief Get the Test description of xsysctl004 register test.
+//! \brief Get the Test description of xsysctl0401 register test.
 //!
-//! \return the desccription of the xcore004 test.
+//! \return the desccription of the xcore0401 test.
 //
 //*****************************************************************************
-static char* xSysctl004GetTest(void)
+static char* xSysctl0401GetTest(void)
 {
-    return "xsysctl, 004, Get Clock Function Test";
+    return "xsysctl, 0401, SysCtlClockGet Test";
 }
 
 //*****************************************************************************
 //
-//! \brief something should do before the test execute of xsysctl004 test.
+//! \brief something should do before the test execute of xsysctl0401 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl004Setup(void)
+static void xSysctl0401Setup(void)
 {
 
 }
 
 //*****************************************************************************
 //
-//! \brief something should do after the test execute of xsysctl004 test.
+//! \brief something should do after the test execute of xsysctl0401 test.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl004TearDown(void)
+static void xSysctl0401TearDown(void)
 {  
     SysCtlDelay(200);
     //xSysCtlPeripheralEnable(SYSCTL_PERIPH_FLITF);
@@ -119,7 +119,7 @@ static void xSysctl004TearDown(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 004 test of SysCtl Power Down Enable test .
+//! \brief xsysctl 0401 test of SysCtl Power Down Enable test .
 //!
 //! \return None.
 //
@@ -189,12 +189,12 @@ static void xsysctl_SysCtlClockGet_test(void)
 
 //*****************************************************************************
 //
-//! \brief xsysctl 004 test execute main body.
+//! \brief xsysctl 0401 test execute main body.
 //!
 //! \return None.
 //
 //*****************************************************************************
-static void xSysctl004Execute(void)
+static void xSysctl0401Execute(void)
 {
     xsysctl_SysCtlClockGet_test();
 }
@@ -202,11 +202,11 @@ static void xSysctl004Execute(void)
 //
 // xsysctl register test case struct.
 //
-const tTestCase sTestXSysctl004Register = {
-    xSysctl004GetTest,
-    xSysctl004Setup,
-    xSysctl004TearDown,
-    xSysctl004Execute,
+const tTestCase sTestXSysctl0401Register = {
+    xSysctl0401GetTest,
+    xSysctl0401Setup,
+    xSysctl0401TearDown,
+    xSysctl0401Execute,
 };
 
 //
@@ -214,6 +214,6 @@ const tTestCase sTestXSysctl004Register = {
 //
 const tTestCase * const psPatternXsysctl04[] =
 {
-    &sTestXSysctl004Register,
+    &sTestXSysctl0401Register,
     0
 };
