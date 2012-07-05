@@ -191,6 +191,12 @@ static char* xSysctl0602GetTest(void)
 //*****************************************************************************
 static void xSysctl0602Setup(void)
 {
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
+
     xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
 }
 
@@ -203,7 +209,13 @@ static void xSysctl0602Setup(void)
 //*****************************************************************************
 static void xSysctl0602TearDown(void)
 {   
-    xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+    
+    xHWREG(BKP_RTCCR) = (unsigned long) 0x00;
+
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
+    
 }
 
 
@@ -272,6 +284,11 @@ static char* xSysctl0603GetTest(void)
 //*****************************************************************************
 static void xSysctl0603Setup(void)
 {
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
     xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
 }
 
@@ -285,6 +302,9 @@ static void xSysctl0603Setup(void)
 static void xSysctl0603TearDown(void)
 {   
     xHWREG(BKP_RTCCR) = (unsigned long) 0x00; 
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 }
 
 
@@ -312,8 +332,8 @@ static void xSysctl0603Execute(void)
     for(i = 0; i < ulSize; i++) 
     {
         SysCtlSetCalibValue(ulTestData[i]); 
-        ulTmp = xHWREG(BKP_RTCCR);
-        TestAssert(((ulTmp & 0x0000007F) == ulTestData[i]),
+        ulTmp = xHWREG(BKP_RTCCR) & 0x0000007F;
+        TestAssert((ulTmp == (ulTestData[i] & 0x0000007F)),
                 "xSysCtl test 0603: SysCtlSetCalibValue failed");
     }
     
@@ -351,6 +371,13 @@ static char* xSysctl0604GetTest(void)
 //*****************************************************************************
 static void xSysctl0604Setup(void)
 {
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
+    xHWREG(BKP_CR)       = (unsigned long) 0x00;
+    xHWREG(BKP_CSR)      = (unsigned long) 0x00; 
 }
 
 //*****************************************************************************
@@ -362,6 +389,11 @@ static void xSysctl0604Setup(void)
 //*****************************************************************************
 static void xSysctl0604TearDown(void)
 {   
+    xHWREG(BKP_CR)       = (unsigned long) 0x00;
+    xHWREG(BKP_CSR)      = (unsigned long) 0x00; 
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 }
 
 //*****************************************************************************

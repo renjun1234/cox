@@ -125,6 +125,8 @@ static void xSysctl0501Setup(void)
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
     xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
 
     for(i = 0; i < 10; i++) 
     {
@@ -150,9 +152,9 @@ static void xSysctl0501TearDown(void)
 {   
     unsigned long  i = 0;
 
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
-    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 
     for(i = 0; i < 10; i++) 
     {
@@ -250,6 +252,8 @@ static void xSysctl0502Setup(void)
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
     xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
 
     for(i = 0; i < 10; i++) 
     {
@@ -275,9 +279,9 @@ static void xSysctl0502TearDown(void)
 {   
     unsigned long  i = 0;
 
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
-    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 
     for(i = 0; i < 10; i++) 
     {
@@ -305,10 +309,6 @@ static void xSysctl0502Execute(void)
 {
     unsigned long  i = 0;
     unsigned long  tmp = 0;
-
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
-    xHWREG(PWR_CR)      |= PWR_CR_DBP;
 
     for(i = 0; i < 10; i++) 
     {
@@ -366,6 +366,8 @@ static void xSysctl0503Setup(void)
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
     xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
     xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;
 
     for(i = 0; i < 10; i++) 
     {
@@ -391,9 +393,9 @@ static void xSysctl0503TearDown(void)
 {   
     unsigned long  i = 0;
 
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
-    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
-    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 
     for(i = 0; i < 10; i++) 
     {

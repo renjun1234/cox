@@ -75,9 +75,11 @@ static void xSysctl0301Setup(void)
     // 
     //
 
-    xHWREG(RCC_APB1ENR)   |= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);    
-    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
-    xHWREG(PWR_CR)   |=   PWR_CR_DBP;   
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) |= RCC_APB1ENR_PWREN;
+    xHWREG(PWR_CR)      |= PWR_CR_DBP;
+    xHWREG(RCC_BDCR)    |= RCC_BDCR_BDRST;
+    xHWREG(RCC_BDCR)    &= ~RCC_BDCR_BDRST;  
 }
 
 //*****************************************************************************
@@ -92,13 +94,9 @@ static void xSysctl0301TearDown(void)
     //
     // Reset Backup Domain and Disable PWR BKP Clock source
     //
-    xHWREG(PWR_CR)   |=  PWR_CR_DBP;
-    
-    xHWREG(RCC_BDCR) |=  RCC_BDCR_BDRST;
-    SysCtlDelay(5);
-    xHWREG(RCC_BDCR) &=  ~RCC_BDCR_BDRST;
-    xHWREG(PWR_CR)   &=  ~PWR_CR_DBP;
-    xHWREG(RCC_APB1ENR)  &= (RCC_APB1ENR_PWREN | RCC_APB1ENR_BKPEN);
+    xHWREG(PWR_CR)      &= ~PWR_CR_DBP;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_BKPEN;
+    xHWREG(RCC_APB1ENR) &= ~RCC_APB1ENR_PWREN;
 }
 
 //*****************************************************************************
@@ -110,7 +108,8 @@ static void xSysctl0301TearDown(void)
 //*****************************************************************************
 static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
 {
-    unsigned long i,ulTemp;
+    unsigned long i = 0;
+    unsigned long ulTemp = 0;
     unsigned long ulArraySize = 0;
     
 
@@ -157,11 +156,13 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
     for(i = 0; i < ulArraySize; i++)
     {
         xHWREG(RCC_CFGR) &= ~(RCC_CFGR_MCO_M);
+        #if 0       
         for(ulWait = 0; ulWait < 3; ulWait++) 
         {
             ;
         }
-    SysCtlDelay(5);
+        #endif
+        SysCtlDelay(5);
 
         //
         // Select MCO Clock Source

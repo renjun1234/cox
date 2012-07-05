@@ -715,7 +715,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     volatile unsigned long ulStartUpCounter;
     xtBoolean xtStatus;
     unsigned long ulOscFreq;
-    xASSERT((ulSysClk > 0 && ulSysClk <= 72000000));
+    xASSERT(((ulSysClk > 0) && (ulSysClk <= 72000000)));
 
     //
     // Set HSION bit
@@ -848,7 +848,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
     //
     xHWREG(FLASH_ACR) |= FLASH_ACR_PRFTBS;       
     
-    if (ulSysClk <= 24000000)
+    if (ulSysClk <= 24000000UL)
     {
         //
         //Flash 0 wait state
@@ -856,7 +856,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
         xHWREG(FLASH_ACR) &= ~FLASH_ACR_LATENCY_M;
         xHWREG(FLASH_ACR) |= FLASH_ACR_LATENCY_0; 
     }
-    else if(ulSysClk <= 48000000)
+    else if(ulSysClk <= 48000000UL)
     {
         //
         //Flash 1 wait state
@@ -864,7 +864,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
         xHWREG(FLASH_ACR) &= ~FLASH_ACR_LATENCY_M;
         xHWREG(FLASH_ACR) |= FLASH_ACR_LATENCY_1;  
     }
-    else if(ulSysClk <= 72000000)
+    else if(ulSysClk <= 72000000UL)
     {
         
         //
@@ -1754,7 +1754,7 @@ void SysCtlRtcOutPutConfig(unsigned long ulRTCOutputSource)
             (ulRTCOutputSource == SYSCTL_RTC_CALIBCLOCK)  
            );
 
-    xHWREG(BKP_RTCCR) &= ~BKP_RTCCR_MASK;
+    xHWREG(BKP_RTCCR) &=  BKP_RTCCR_MASK;
     xHWREG(BKP_RTCCR) |=  ulRTCOutputSource;
 
 }
