@@ -36,10 +36,6 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
-#define STM32103VB
-#include "stm32f10xx_reg.h"
-
-
 
 
 typedef struct 

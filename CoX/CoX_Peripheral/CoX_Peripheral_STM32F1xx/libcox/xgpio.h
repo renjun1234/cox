@@ -264,8 +264,8 @@ extern "C"
 //
 // Pin is a peripheral function
 //
-#define xGPIO_DIR_MODE_HW       GPIO_DIR_MODE_HW
-
+//#define xGPIO_DIR_MODE_HW       GPIO_DIR_MODE_HW
+#define xGPIO_DIR_MODE_HW       GPIO_DIR_MODE_HWSTD
 //
 // Pin is in Quasi-bidirectional mode
 //
@@ -2621,7 +2621,8 @@ extern unsigned long xGPIODirModeGet(unsigned long ulPort,
 //
 //! Pin is in a peripheral function.
 //
-#define GPIO_DIR_MODE_HWSTD     GPIO_OUT_SPEED_50M | GPIO_TYPE_AFOUT_STD 
+#define GPIO_DIR_MODE_HWSTD     GPIO_OUT_SPEED_50M | GPIO_TYPE_AFOUT_STD
+
 #define GPIO_DIR_MODE_HWOD      GPIO_OUT_SPEED_50M | GPIO_TYPE_AFOUT_OD
 
 //*****************************************************************************

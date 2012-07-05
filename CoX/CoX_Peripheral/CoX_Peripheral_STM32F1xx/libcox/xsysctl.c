@@ -769,6 +769,7 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
         case SYSCTL_OSC_MAIN:
         case xSYSCTL_OSC_MAIN:
         {
+           
             xASSERT(!(ulConfig & SYSCTL_MAIN_OSC_DIS));
 
             xHWREG(RCC_CR) &= ~RCC_CR_HSEON;
@@ -826,9 +827,9 @@ SysCtlClockSet(unsigned long ulSysClk, unsigned long ulConfig)
             
             while((xHWREG(RCC_CFGR) & RCC_CFGR_SWS_M) != 0x00); 
             
-            if((ulConfig & SYSCTL_INT_OSC_DIS)!=0)
+            if((ulConfig & SYSCTL_MAIN_OSC_DIS)!=0)
             {
-                xHWREG(RCC_CR) &= ~RCC_CR_HSION;
+                xHWREG(RCC_CR) &= ~RCC_CR_HSEON;
             }
             if((ulConfig & SYSCTL_PLL_PWRDN)!=0)
             {
@@ -1199,10 +1200,11 @@ SysCtlLSEConfig(unsigned long ulLSEConfig)
 //! \brief Set a peripheral clock source and peripheral divide.
 //!
 //! \param ulPeripheralSrc is the peripheral clock source to set.
+//! \param ulDivide used to set ADC Clock Divide.
 //!
-//! Peripherals clock source are seted with this function.  At power-up, all 
-//! Peripherals clock source are Peripherals clock source; they must be set in 
-//! order to operate or respond to register reads/writes.
+//! Peripherals clock source are set with this function.  At power-up, all 
+//! Peripherals clock source are DISABLED, so you must enable peripherals clock 
+//! before operate register.
 //!
 //! The \e ulPeripheralSrc parameter must be only one of the following values:
 //! \ref STM32F1xx_SysCtl_Stclk_Src.
@@ -1213,28 +1215,35 @@ SysCtlLSEConfig(unsigned long ulLSEConfig)
 void
 SysCtlPeripheralClockSourceSet(unsigned long ulPeripheralSrc, unsigned long ulDivide)
 {
-    unsigned long ulTemp = 0;
     //
     // Check the arguments. 
     //
-    xASSERT((ulPeripheralSrc==SYSCTL_RTC_LSE)||
-            (ulPeripheralSrc==SYSCTL_RTC_LSI)||
-            (ulPeripheralSrc==SYSCTL_RTC_LSE_128)||
-            (ulPeripheralSrc==SYSCTL_MCO_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_MCO_HSI)||
-            (ulPeripheralSrc==SYSCTL_MCO_HSE)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL_2)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3_2)||
-            (ulPeripheralSrc==SYSCTL_MCO_XT1)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL3)||
-            (ulPeripheralSrc==SYSCTL_ADC_HCLK)||
-            (ulPeripheralSrc==SYSCTL_IWDG_LSI)||
-            (ulPeripheralSrc==SYSCTL_I2S3_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_I2S3_PLL3)||
-            (ulPeripheralSrc==SYSCTL_I2S2_SYSCLK)||
-            (ulPeripheralSrc==SYSCTL_I2S2_PLL3)||
-            (ulPeripheralSrc==SYSCTL_MCO_PLL2)         
+    xASSERT((ulPeripheralSrc == SYSCTL_RTC_LSE)    ||
+            (ulPeripheralSrc == SYSCTL_RTC_LSI)    ||
+            (ulPeripheralSrc == SYSCTL_RTC_LSE_128)||
+            (ulPeripheralSrc == SYSCTL_MCO_SYSCLK) ||
+            (ulPeripheralSrc == SYSCTL_MCO_HSI)    ||
+            (ulPeripheralSrc == SYSCTL_MCO_HSE)    ||
+            (ulPeripheralSrc == SYSCTL_MCO_PLL_2)  ||
+            (ulPeripheralSrc == SYSCTL_MCO_PLL3_2) ||
+            (ulPeripheralSrc == SYSCTL_MCO_XT1)    ||
+            (ulPeripheralSrc == SYSCTL_MCO_PLL3)   ||
+            (ulPeripheralSrc == SYSCTL_ADC_HCLK)   ||
+            (ulPeripheralSrc == SYSCTL_IWDG_LSI)   ||
+            (ulPeripheralSrc == SYSCTL_I2S3_SYSCLK)||
+            (ulPeripheralSrc == SYSCTL_I2S3_PLL3)  ||
+            (ulPeripheralSrc == SYSCTL_I2S2_SYSCLK)||
+            (ulPeripheralSrc == SYSCTL_I2S2_PLL3)  ||
+            (ulPeripheralSrc == SYSCTL_MCO_PLL2)         
            );
+
+    xASSERT(
+            (ulDivide == 2) ||
+            (ulDivide == 4) ||
+            (ulDivide == 6) ||
+            (ulDivide == 8)
+            );
+
     if(SYSCTL_PERIPH_INDEX_CLK(ulPeripheralSrc) == 1)
     {
         xHWREG(RCC_BDCR) &= ~(RCC_BDCR_RTCSEL_M);
@@ -1259,13 +1268,10 @@ SysCtlPeripheralClockSourceSet(unsigned long ulPeripheralSrc, unsigned long ulDi
     }
     else if(ulPeripheralSrc==SYSCTL_ADC_HCLK)
     {
-        for(ulTemp=0; ulTemp<8; ulTemp++)
-        {
-            if(ulDivide == (1 << ulTemp))
-                break;
-        }
+        ulDivide = (ulDivide/2) - 1;
+        ulDivide &= 0x03;
         xHWREG(RCC_CFGR) &= ~RCC_CFGR_ADCPRE_M;
-        xHWREG(RCC_CFGR) |= (ulTemp << RCC_CFGR_ADCPRE_S);
+        xHWREG(RCC_CFGR) |= (ulDivide << RCC_CFGR_ADCPRE_S);
     }
     else
     {
@@ -1658,7 +1664,7 @@ SysCtlBackupDataRead(unsigned long ulRegisterID)
             (ulRegisterID == BKP_DR39)||
             (ulRegisterID == BKP_DR40)||
             (ulRegisterID == BKP_DR41)||
-            (ulRegisterID == BKP_DR42)||
+            (ulRegisterID == BKP_DR42)
             );
     return xHWREG(ulRegisterID);
 }
@@ -1726,7 +1732,7 @@ SysCtlBackupDataWrite(unsigned long ulRegisterID,unsigned long ulValue)
             (ulRegisterID == BKP_DR39)||
             (ulRegisterID == BKP_DR40)||
             (ulRegisterID == BKP_DR41)||
-            (ulRegisterID == BKP_DR42)||
+            (ulRegisterID == BKP_DR42)
             );
      xHWREG(ulRegisterID) = (ulValue & 0x0000FFFF);
 }
@@ -1993,6 +1999,7 @@ SysCtlPVDLevelConfig(unsigned long ulConfig)
     xHWREG(PWR_CR) &= ~(PWR_CR_PVDE | PWR_CR_PLS_M);
     xHWREG(PWR_CR) |= ulConfig;
 }
+
 
 //*****************************************************************************
 //

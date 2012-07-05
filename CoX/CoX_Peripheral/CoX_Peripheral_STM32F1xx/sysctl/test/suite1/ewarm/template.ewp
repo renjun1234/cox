@@ -103,7 +103,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F10xxB	ST STM32F10xxB</state>
+          <state>STM32F10xxE	ST STM32F10xxE</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -1702,13 +1702,19 @@
     <group>
       <name>testcase</name>
       <file>
-        <name>$PROJ_DIR$\..\src\stm32f10xx_reg.c</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\src\testcase.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\src\testcase.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\Xsysctltest01.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\Xsysctltest02.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\Xsysctltest03.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\src\Xsysctltest04.c</name>
@@ -1718,6 +1724,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\src\Xsysctltest06.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\Xsysctltest07.c</name>
       </file>
     </group>
     <group>

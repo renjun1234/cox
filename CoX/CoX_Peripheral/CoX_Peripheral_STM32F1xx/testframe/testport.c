@@ -15,7 +15,7 @@
 void 
 TestIOInit(void)
 {
-    xSysCtlClockSet(24000000, xSYSCTL_OSC_MAIN | xSYSCTL_XTAL_8MHZ);
+    xSysCtlClockSet(72000000, xSYSCTL_OSC_MAIN | xSYSCTL_XTAL_8MHZ);
 
     SysCtlDelay(10000);
 

@@ -36,8 +36,7 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
-#define STM32F103VB
-#include "stm32f10xx_reg.h"
+
 
 //*****************************************************************************
 //

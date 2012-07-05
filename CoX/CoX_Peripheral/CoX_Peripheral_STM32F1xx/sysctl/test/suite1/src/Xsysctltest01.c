@@ -37,8 +37,6 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
-#define STM32F103VB
-#include "stm32f10xx_reg.h"
 //*****************************************************************************
 //
 //!\page test_xsysctl_register test_xsysctl_register
@@ -48,6 +46,17 @@
 //!
 //
 //*****************************************************************************
+
+static unsigned long ulSysCtlIntPara[] = 
+{
+    SYSCTL_INT_LSI,
+    SYSCTL_INT_LSE,
+    SYSCTL_INT_HSI,
+    SYSCTL_INT_HSE,
+    SYSCTL_INT_PLL,
+    //SYSCTL_INT_PLL2
+    //SYSCTL_INT_PLL3
+};
 
 
 //*****************************************************************************
@@ -96,9 +105,12 @@ static void xSysctl0101TearDown(void)
 static void xSysctl0101Execute(void)
 {
     unsigned long i = 0;
-    unsigned long ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);
+    unsigned long ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);    
     unsigned long ulTemp = 0;
 
+    
+    //ulSize = sizeof(ulSysCtlIntPara)/sizeof(ulSysCtlIntPara[0]);
+    
     for(i = 0; i < ulSize; i++)
     {
         SysCtlIntEnable(ulSysCtlIntPara[i]);

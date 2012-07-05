@@ -1779,12 +1779,12 @@ extern unsigned long xSysCtlPeripheraIntNumGet(unsigned long ulPeripheralBase);
 //
 //! Disable internal oscillator
 //
-#define SYSCTL_INT_OSC_DIS      0x00000001  
+#define SYSCTL_INT_OSC_DIS      0x10000000  
 
 //
 //! Disable main oscillator
 //
-#define SYSCTL_MAIN_OSC_DIS     0x00010000  
+#define SYSCTL_MAIN_OSC_DIS     0x00100000  
 
 //
 //! Disable PLL

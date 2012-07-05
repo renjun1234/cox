@@ -36,8 +36,7 @@
 #include "test.h"
 #include "xhw_memmap.h"
 
-#define STM32F10301VB
-#include "stm32f10xx_reg.h"
+
 //*****************************************************************************
 //
 //!\page test_xsysctl_register test_xsysctl_register
@@ -47,6 +46,23 @@
 //!
 //
 //*****************************************************************************
+
+unsigned long ulRTCSource[] = 
+{
+    SYSCTL_RTC_LSE, 
+    SYSCTL_RTC_LSI,
+    SYSCTL_RTC_LSE_128,
+};
+
+
+unsigned long ulMCOClkSource[] = 
+{
+    SYSCTL_MCO_SYSCLK,
+    SYSCTL_MCO_HSI,  
+    SYSCTL_MCO_HSE,
+    SYSCTL_MCO_PLL_2,
+};
+
 
 //*****************************************************************************
 //
@@ -111,12 +127,44 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
     unsigned long i = 0;
     unsigned long ulTemp = 0;
     unsigned long ulArraySize = 0;
-    
 
+
+    unsigned long ulRTCSource[] = 
+    {
+        SYSCTL_RTC_LSE, 
+        SYSCTL_RTC_LSI,
+        SYSCTL_RTC_LSE_128,
+    };
+
+
+    unsigned long ulMCOClkSource[] = 
+    {
+        SYSCTL_MCO_SYSCLK,
+        SYSCTL_MCO_HSI,  
+        SYSCTL_MCO_HSE,
+        SYSCTL_MCO_PLL_2,
+    };
+
+    unsigned long ulADCDivide[4] = 
+    {
+        2,
+        4,
+        6,
+        8,
+    };
+
+    unsigned long ulADCSet[4] = 
+    {
+        0,
+        1,
+        2,
+        3,
+    };
     //
     // Test for RTC source
     //   
-    ulArraySize = sizeof(ulRTCSource)/sizeof(ulRTCSource[0]);
+    ulArraySize = sizeof(ulRTCSource)/sizeof(ulRTCSource[0]);        
+            
     for(i = 0; i < ulArraySize; i++)
     {
         //
@@ -135,7 +183,7 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         // note: once selected , it cannot be change anymore unless RESET Backup
         //       Domain
         //
-        SysCtlPeripheralClockSourceSet(ulRTCSource[i]);
+        SysCtlPeripheralClockSourceSet(ulRTCSource[i],0);
 
         //
         // 0 <= Wait state <= 5
@@ -168,7 +216,7 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
         // Select MCO Clock Source
         // Note: 0 <= waitstate <= 5
         //
-        SysCtlPeripheralClockSourceSet(ulMCOClkSource[i]);
+        SysCtlPeripheralClockSourceSet(ulMCOClkSource[i], 0);
         SysCtlDelay(5);
         
         ulTemp = xHWREG(RCC_CFGR);
@@ -181,40 +229,60 @@ static void xsysctl_SysCtlPeripheralClockSourceSet_test(void)
     // Test for I2S2, 
     // note : optional, this test is only for the mcu that have I2S2 interface
     //
-    #if defined (I2S_2)
+    
+    #if defined (STM32F1xx_HD)
+
     // 
     // Select System Clock as I2S2 clock source
     //
-    SysCtlPeripheralClockSourceSet(SYSCTL_I2S2_SYSCLK);
+    SysCtlPeripheralClockSourceSet(SYSCTL_I2S2_SYSCLK, 0);
     ulTemp = xHWREG(RCC_CFGR2);
     TestAssert(((ulTemp&RCC_CFGR2_I2S2SRC) == 0), "xsysctl API error!");
 
     // 
     // Select PLL3 VCO clock as I2S2 clock source
     //
-    SysCtlPeripheralClockSourceSet(SYSCTL_I2S2_PLL3);
+    SysCtlPeripheralClockSourceSet(SYSCTL_I2S2_PLL3, 0);
     ulTemp = xHWREG(RCC_CFGR2);
     TestAssert(((ulTemp&RCC_CFGR2_I2S2SRC) != 0), "xsysctl API error!");
 
-    #endif
 
-
-    #if defined (I2S_3)
     // 
     // Select System Clock as I2S3 clock source
     //
-    SysCtlPeripheralClockSourceSet(SYSCTL_I2S3_SYSCLK);
+    SysCtlPeripheralClockSourceSet(SYSCTL_I2S3_SYSCLK, 0);
     ulTemp = xHWREG(RCC_CFGR2);
     TestAssert(((ulTemp&RCC_CFGR2_I2S3SRC) == 0), "xsysctl API error!");
 
     // 
     // Select PLL3 VCO clock as I2S2 clock source
     //
-    SysCtlPeripheralClockSourceSet(SYSCTL_I2S3_PLL3);
+    SysCtlPeripheralClockSourceSet(SYSCTL_I2S3_PLL3, 0);
     ulTemp = xHWREG(RCC_CFGR2);
     TestAssert(((ulTemp&RCC_CFGR2_I2S3SRC) != 0), "xsysctl API error!");
 
     #endif
+
+    //
+    // Test for ADC Divide
+    //
+
+    for(i = 0; i < 4; i++)
+    {
+
+        SysCtlDelay(5);
+        //
+        // Select MCO Clock Source
+        // Note: 0 <= waitstate <= 5
+        //
+        SysCtlPeripheralClockSourceSet(SYSCTL_ADC_HCLK, ulADCDivide[i]);
+
+        SysCtlDelay(5);
+        
+        ulTemp = xHWREG(RCC_CFGR) & RCC_CFGR_ADCPRE_M;
+        ulTemp >>= RCC_CFGR_ADCPRE_S;
+        TestAssert((ulTemp == ulADCSet[i]), "xsysctl API error!");
+    }
 
 
 }
