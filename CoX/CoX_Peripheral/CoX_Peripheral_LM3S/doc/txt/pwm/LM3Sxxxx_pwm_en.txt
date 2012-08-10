@@ -1,0 +1,150 @@
+//*****************************************************************************
+//
+//! \defgroup LM3Sxxxx_PWM LM3Sxxxx PWM
+//! 
+//! \brief Nuvoton LM3Sxxxx PWM Peripheral Driver.
+//!
+//! The CoX Peripheral Library also provides APIs for full functions of Nuvoton
+//! LM3Sxxxx PWM. This module supports the whole LM3Sxxxx Series.
+//!
+//! <br />
+//! <h1>Contents</h1>
+//! - \ref LM3Sxxxx_PWM_Blcok
+//! - \ref LM3Sxxxx_PWM_Function_Desc
+//! - \ref LM3Sxxxx_PWM_API_Group
+//!   - \ref LM3Sxxxx_PWM_API_Group_Config
+//!   - \ref LM3Sxxxx_PWM_API_Group_Function
+//!     - \ref LM3Sxxxx_PWM_API_Group_Output
+//!     - \ref LM3Sxxxx_PWM_API_Group_Interrupt
+//!   .
+//! - \ref LM3Sxxxx_PWM_Usage
+//! .
+//!
+//! <br />
+//! \section LM3Sxxxx_PWM_Blcok 1. PWM Physical Block
+//! <img src="PWM_Module_Diagram.PNG" />
+//! <img src="PWM_Generator_module_block.PNG"/>
+//! 
+//! <br />
+//! \section LM3Sxxxx_PWM_Function_Desc 2. Functional Description
+//! PWM includes the following functions:
+//! - Interrupt
+//! - Output
+//! .
+//! 
+//! <br />
+//! \section LM3Sxxxx_PWM_API_Group 3. API Groups
+//! 
+//! The PWM API is broken into two groups of functions : 
+//! - those that deal with configuring the PWM
+//! - those that deal with functions
+//! .
+//!
+//! <br />
+//! \subsection LM3Sxxxx_PWM_API_Group_Config 3.1 PWM Configuration APIs 
+//! 
+//! The PWM are configured with :
+//! - PWMInitConfigure()
+//! - PWMFrequencySet()
+//! - PWMFrequencyConfig()
+//! - PWMDutySet()
+//! .
+//! 
+//! <br />
+//! \subsection LM3Sxxxx_PWM_API_Group_Function 3.2 PWM Function APIs
+//! 
+//! <br />
+//! \subsubsection LM3Sxxxx_PWM_API_Group_Output 3.2.1 PWM Output APIs
+//!
+//! The PWM Output are set with : 
+//! - PWMOutputEnable()
+//! - PWMOutputDisable() 
+//! .
+//!
+//! <br />
+//! \subsubsection LM3Sxxxx_PWM_API_Group_Capture 3.2.2 PWM Capture APIs
+//!
+//! The PWM Capture are set with : 
+//! - PWMOutputEnable()
+//! - PWMOutputDisable() 
+//! .
+//!
+//! <br />
+//! \subsubsection LM3Sxxxx_PWM_API_Group_Interrupt 3.2.3 PWM Interrupt APIs
+//!
+//! The PWM Interrupt are set with : 
+//! - PWMIntEnable()
+//! - PWMIntDisable()
+//! - PWMIntFlagClear() 
+//! .
+//!
+//! <br />
+//! \section LM3Sxxxx_PWM_Usage 4. Usage & Program Examples
+//! The following example shows how to use the PWM APIs to initialize 
+//! the PWM and to achieve the PWM interrupt function.
+//! 
+//! \code
+//!
+//! reserved for example code
+//!
+//! \endcode
+//! 
+//! 
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+//! \defgroup LM3Sxxxx_PWM_Exported_APIs PWM Exported APIs Refrence
+//!
+//! \brief Texas Instruments LM3Sxxxx PWM Driver Exported APIs.
+//!
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+//! \defgroup LM3Sxxxx_PWM_Int_Type PWM Interrupt Type
+//! 
+//! \brief Values that can be passed to \b PWMIntEnable(), \b PWMIntDisable().
+//!
+//! All the four macros:
+//! -\ref PWM_INT_PWM
+//! -\ref PWM_INT_CAP_FALL
+//! -\ref PWM_INT_CAP_RISE
+//! -\ref PWM_INT_CAP_BOTH
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+//! \defgroup LM3Sxxxx_PWM_Event_Type PWM Event Type
+//! 
+//!
+//! \brief Values that can be passed to \b PWMIntEnable(), \b PWMIntDisable(). 
+//! 
+//! All the two macros:
+//! -\ref PWM_EVENT_PWM
+//! -\ref PWM_EVENT_CAP
+//
+//*****************************************************************************
+
+//*****************************************************************************
+//
+//! \defgroup LM3Sxxxx_PWM_Channel PWM Channel
+//! 
+//!
+//! \brief Values that can be passed to all the function. 
+//! 
+//! All the eight macros:
+//! -\ref PWM_CHANNEL0
+//! -\ref PWM_CHANNEL1
+//! -\ref PWM_CHANNEL2
+//! -\ref PWM_CHANNEL3
+//! -\ref PWM_CHANNEL4
+//! -\ref PWM_CHANNEL5
+//! -\ref PWM_CHANNEL6
+//! -\ref PWM_CHANNEL7
+//
+//*****************************************************************************
+

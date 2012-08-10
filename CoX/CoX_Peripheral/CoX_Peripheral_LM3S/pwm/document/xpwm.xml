@@ -1,0 +1,46 @@
+<?xml version="2.0" ?>
+<Component>
+    <Name>COX.Peripheral.LM3Sxxxx.xPWM</Name>
+    <Description>LM3Sxxxx PWM Driver</Description>
+    <Category>Peripheral.COX</Category>
+    <Version>2.0.0</Version>
+    <Tags>COX, xPWM, PWM</Tags>
+
+    <Files>
+        <File>..\..\libcox\xpwm.h</File>
+        <File>..\..\libcox\xpwm.c</File>
+    </Files>
+
+    <FilesCoIDE>
+        <File>$PROJECT_ROOT$\COX\COX_Peripheral\src\xpwm.h</File>
+        <File>$PROJECT_ROOT$\COX\COX_Peripheral\inc\xpwm.c</File>
+    </FilesCoIDE>
+
+    <Dependencys>
+        <Dependency>COX.Peripheral.LM3Sxxxx.xStartup</Dependency>
+        <Dependency>COX.Peripheral.LM3Sxxxx.xLowLayer</Dependency>
+		<Dependency>COX.Peripheral.LM3Sxxxx.xSysCtl</Dependency>
+		<Dependency>COX.Peripheral.LM3Sxxxx.xGPIO</Dependency>
+    </Dependencys>
+
+    <SupportDevices>
+        <Series>
+            <Serie exclude="">LM3Sxxxx</Serie>
+        </Series>
+        <Devices>
+            <Device></Device>
+        </Devices>
+    </SupportDevices>
+
+    <Micros>
+        <Comm>
+            <Define></Define>
+        </Comm>
+        <Device name="">
+            <Define></Define>
+        </Device>   
+    </Micros>
+
+    <Help>$DOCUMENT_ROOT$\</Help>
+
+</Component>
